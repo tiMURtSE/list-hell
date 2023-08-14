@@ -1,0 +1,21 @@
+:root {
+	--color-bisque: #ebe6e4;
+	--color-dark-bisque: #ebd3ca;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+
+	font-family: monospace;
+	font-size: 18px;
+}
+
+li {
+	list-style: none;
+}
