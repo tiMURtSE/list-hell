@@ -1,41 +1,31 @@
 import { useState } from "react";
-import styles from "./App.module.css";
-import Tab from "./components/Tab/Tab";
 import { tabs } from "./consts";
-import { ITask } from "./types";
+import { recursiveMap } from "./utils/recursiveMap";
+import TabList from "./components/TabList/TabList";
+import styles from "./App.module.css";
 
 function App() {
-	const [selectedTab, setSelectedTab] = useState("");
-	const tasks = tabs.find((tab) => tab.name === selectedTab)?.tasks;
-
-	const recursiveMap = (task: ITask) => {
-		if (task.subTasks.length) {
-			return (
-				<li key={task.id}>
-					{task.isCompleted ? <del>{task.value}</del> : task.value}
-
-					<ul>{task.subTasks.map((subTask) => recursiveMap(subTask))}</ul>
-				</li>
-			);
-		} else {
-			return <li key={task.id}>{task.isCompleted ? <del>{task.value}</del> : task.value}</li>;
-		}
-	};
+	const [selectedTab, setSelectedTab] = useState(tabs[0].title);
+	const tab = tabs.find((tab) => tab.title === selectedTab);
 
 	return (
 		<div className={styles["container"]}>
-			<ul className={styles["tabs"]}>
-				{tabs.map((tab) => (
-					<Tab
-						name={tab.name}
-						isSelected={selectedTab === tab.name}
-						setSelectedTab={setSelectedTab}
-						key={tab.name}
-					/>
-				))}
-			</ul>
+			<TabList
+				tabs={tabs}
+				selectedTab={selectedTab}
+				setSelectedTab={setSelectedTab}
+			/>
 
-			<ul>{tasks && tasks.map((task) => recursiveMap(task))}</ul>
+			<ul>
+				{tab?.tasks.length ? (
+					tab.tasks.map((task) => recursiveMap(task))
+				) : (
+					<>
+						<div>Список пуст</div>
+						<input type="text" />
+					</>
+				)}
+			</ul>
 		</div>
 	);
 }

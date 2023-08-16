@@ -2,7 +2,8 @@ import { ITab } from "../types";
 
 export const tabs: ITab[] = [
 	{
-		name: "Сегодня",
+		id: crypto.randomUUID(),
+		title: "Сегодня",
 		tasks: [
 			{
 				id: crypto.randomUUID(),
@@ -32,7 +33,8 @@ export const tabs: ITab[] = [
 		],
 	},
 	{
-		name: "Неделя",
+		id: crypto.randomUUID(),
+		title: "Неделя",
 		tasks: [
 			{
 				id: crypto.randomUUID(),
@@ -62,14 +64,8 @@ export const tabs: ITab[] = [
 		],
 	},
 	{
-		name: "JavaScript",
-		tasks: [
-			{
-				id: crypto.randomUUID(),
-				value: "Выучить итераторы",
-				subTasks: [],
-				isCompleted: true,
-			},
-		],
+		id: crypto.randomUUID(),
+		title: "JavaScript",
+		tasks: [],
 	},
 ];

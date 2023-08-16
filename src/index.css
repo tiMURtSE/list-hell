@@ -16,6 +16,13 @@ body {
 	font-size: 18px;
 }
 
+button {
+	border: none;
+	background-color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+}
+
 li {
 	list-style: none;
 }

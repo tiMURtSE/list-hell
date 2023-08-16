@@ -1,5 +1,6 @@
 export interface ITab {
-	name: string;
+	id: string;
+	title: string;
 	tasks: ITask[];
 }
 

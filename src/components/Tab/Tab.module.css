@@ -1,5 +1,6 @@
 .tab {
 	max-width: 250px;
+	min-width: 160px;
 	padding: 15px 50px;
 	border-radius: 10px;
 

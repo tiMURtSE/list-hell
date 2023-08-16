@@ -1,33 +1,23 @@
-import { LiHTMLAttributes } from "react";
-
+import { ButtonHTMLAttributes } from "react";
+import classNames from "classnames";
 import styles from "./Tab.module.css";
 
-interface Props extends LiHTMLAttributes<HTMLLIElement> {
-	name: string;
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+	title: string;
 	isSelected: boolean;
 	setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function Tab({ name, isSelected, setSelectedTab, ...props }: Props) {
-	const className = isSelected ? [styles["tab"], styles["selected"]].join(" ") : styles["tab"];
-
-	const handleSelect = () => {
-		if (isSelected) {
-			setSelectedTab("");
-		} else {
-			setSelectedTab(name);
-		}
-	};
-
+function Tab({ title, isSelected, setSelectedTab, ...props }: Props) {
 	return (
-		<li
-			className={className}
-			title={name}
-			onClick={handleSelect}
+		<button
+			className={classNames(styles.tab, { [styles.selected]: isSelected })}
+			title={title}
+			onClick={() => setSelectedTab(title)}
 			{...props}
 		>
-			{name}
-		</li>
+			{title}
+		</button>
 	);
 }
 
