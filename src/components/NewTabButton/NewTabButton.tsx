@@ -1,12 +1,23 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, useContext } from "react";
 import styles from "./NewTabButton.module.css";
+import { MyContext } from "../../App";
+import { LocalStorage } from "../../utils/LocalStorage";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 function NewTabButton({ ...props }: Props) {
+	const { tabs, setTabs } = useContext(MyContext);
+
+	const addNewTab = () => {
+		const newTab = LocalStorage.addTab("");
+
+		setTabs([...tabs, newTab]);
+	};
+
 	return (
 		<button
 			className={styles.btn}
+			onClick={addNewTab}
 			{...props}
 		>
 			<svg

@@ -1,32 +1,40 @@
-import { useState } from "react";
-import { tabs } from "./consts";
+import { createContext, useContext, useState } from "react";
+import { tabsFromConsts } from "./consts";
 import { recursiveMap } from "./utils/recursiveMap";
 import TabList from "./components/TabList/TabList";
 import styles from "./App.module.css";
+import { LocalStorage } from "./utils/LocalStorage";
+
+const tabsFromLocalStorage = LocalStorage.getTabs();
+export const MyContext = createContext<any>(tabsFromLocalStorage);
 
 function App() {
-	const [selectedTab, setSelectedTab] = useState(tabs[0].title);
-	const tab = tabs.find((tab) => tab.title === selectedTab);
+	const [tabs, setTabs] = useState(tabsFromLocalStorage);
+
+	const [selectedTab, setSelectedTab] = useState(tabs ? tabs[0].title : "");
+	const currentOpenedTab = tabs ? tabs.find((tab) => tab.title === selectedTab) : null;
 
 	return (
-		<div className={styles["container"]}>
-			<TabList
-				tabs={tabs}
-				selectedTab={selectedTab}
-				setSelectedTab={setSelectedTab}
-			/>
+		<MyContext.Provider value={{ tabs, setTabs }}>
+			<div className={styles["container"]}>
+				<TabList
+					tabs={tabs}
+					selectedTab={selectedTab}
+					setSelectedTab={setSelectedTab}
+				/>
 
-			<ul>
-				{tab?.tasks.length ? (
-					tab.tasks.map((task) => recursiveMap(task))
-				) : (
-					<>
-						<div>Список пуст</div>
-						<input type="text" />
-					</>
-				)}
-			</ul>
-		</div>
+				<ul>
+					{currentOpenedTab?.tasks.length ? (
+						currentOpenedTab.tasks.map((task) => recursiveMap(task))
+					) : (
+						<>
+							<div>Список пуст</div>
+							<input type="text" />
+						</>
+					)}
+				</ul>
+			</div>
+		</MyContext.Provider>
 	);
 }
 

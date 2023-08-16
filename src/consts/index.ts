@@ -1,6 +1,6 @@
 import { ITab } from "../types";
 
-export const tabs: ITab[] = [
+export const tabsFromConsts: ITab[] = [
 	{
 		id: crypto.randomUUID(),
 		title: "Сегодня",
