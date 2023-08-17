@@ -10,3 +10,8 @@ export interface ITask {
 	subTasks: ITask[];
 	isCompleted: boolean;
 }
+
+export interface ContextProps {
+	tabs: ITab[];
+	setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
+}

@@ -1,24 +1,24 @@
-import { createContext, useContext, useState } from "react";
-import { tabsFromConsts } from "./consts";
+import { createContext, useState } from "react";
 import { recursiveMap } from "./utils/recursiveMap";
 import TabList from "./components/TabList/TabList";
 import styles from "./App.module.css";
 import { LocalStorage } from "./utils/LocalStorage";
+import { tabsFromConsts } from "./consts";
+import { ContextProps, ITab } from "./types";
 
-const tabsFromLocalStorage = LocalStorage.getTabs();
-export const MyContext = createContext<any>(tabsFromLocalStorage);
+// const tabsFromLocalStorage = LocalStorage.getTabs();
+export const MyContext = createContext<ContextProps | null>(null);
 
 function App() {
-	const [tabs, setTabs] = useState(tabsFromLocalStorage);
+	const [tabs, setTabs] = useState(tabsFromConsts);
 
-	const [selectedTab, setSelectedTab] = useState(tabs ? tabs[0].title : "");
+	const [selectedTab, setSelectedTab] = useState(tabs.length ? tabs[0].title : "");
 	const currentOpenedTab = tabs ? tabs.find((tab) => tab.title === selectedTab) : null;
 
 	return (
 		<MyContext.Provider value={{ tabs, setTabs }}>
 			<div className={styles["container"]}>
 				<TabList
-					tabs={tabs}
 					selectedTab={selectedTab}
 					setSelectedTab={setSelectedTab}
 				/>

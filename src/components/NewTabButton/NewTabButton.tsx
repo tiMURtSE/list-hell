@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, useContext } from "react";
 import styles from "./NewTabButton.module.css";
 import { MyContext } from "../../App";
-import { LocalStorage } from "../../utils/LocalStorage";
+import { ITab } from "../../types";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
@@ -9,7 +9,11 @@ function NewTabButton({ ...props }: Props) {
 	const { tabs, setTabs } = useContext(MyContext);
 
 	const addNewTab = () => {
-		const newTab = LocalStorage.addTab("");
+		const newTab = {
+			id: crypto.randomUUID(),
+			title: "",
+			tasks: [],
+		} as ITab;
 
 		setTabs([...tabs, newTab]);
 	};
