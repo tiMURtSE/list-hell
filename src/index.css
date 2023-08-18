@@ -1,6 +1,8 @@
 :root {
 	--color-bisque: #ebe6e4;
-	--color-dark-bisque: #ebd3ca;
+	--color-dark-bisque: #e78863;
+	--color-dark: #202124;
+	--color-light: #dfdfe0;
 
 	--border-radius-medium: 10px;
 }
@@ -15,6 +17,8 @@ body {
 	height: 100vh;
 	margin: 0;
 
+	background-color: var(--color-dark);
+	color: var(--color-light);
 	font-family: monospace;
 	font-size: 18px;
 }
@@ -22,8 +26,8 @@ body {
 button {
 	border: none;
 	background-color: inherit;
-	font-family: inherit;
-	font-size: inherit;
+	color: inherit;
+	font: inherit;
 }
 
 li {

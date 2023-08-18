@@ -1,34 +1,23 @@
-import { useContext, useState } from "react";
-import NewTabButton from "../NewTabButton/NewTabButton";
+import { useContext } from "react";
 import Tab from "../Tab/Tab";
 import styles from "./TabList.module.css";
-import { MyContext } from "../../App";
-import { ContextProps } from "../../types";
+import { IContext } from "../../types";
+import { TabContext } from "../../hooks/useContext";
 
 type Props = {};
 
 function TabList({}: Props) {
-	const { tabs } = useContext(MyContext) as ContextProps;
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { tabs } = useContext(TabContext) as IContext;
 
 	return (
-		<>
-			<div className={styles.tabs}>
-				{tabs.map((tab) => (
-					<Tab
-						tab={tab}
-						isSubmitting={isSubmitting}
-						setIsSubmitting={setIsSubmitting}
-						key={tab.id}
-					/>
-				))}
-
-				<NewTabButton
-					isSubmitting={isSubmitting}
-					setIsSubmitting={setIsSubmitting}
+		<div className={styles.tabs}>
+			{tabs.map((tab) => (
+				<Tab
+					tab={tab}
+					key={tab.id}
 				/>
-			</div>
-		</>
+			))}
+		</div>
 	);
 }
 

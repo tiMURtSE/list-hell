@@ -11,9 +11,9 @@ export interface ITask {
 	isCompleted: boolean;
 }
 
-export interface ContextProps {
+export interface IContext {
 	tabs: ITab[];
 	setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
-	selectedTab: ITab;
-	setSelectedTab: React.Dispatch<React.SetStateAction<ITab>>;
+	activeTab: ITab;
+	setActiveTab: React.Dispatch<React.SetStateAction<ITab>>;
 }

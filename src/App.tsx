@@ -1,35 +1,27 @@
-import { createContext, useEffect, useState } from "react";
-import { recursiveMap } from "./utils/recursiveMap";
-import TabList from "./components/TabList/TabList";
+import { useState } from "react";
 import styles from "./App.module.css";
+import { TabContext } from "./hooks/useContext";
 import { LocalStorage } from "./utils/LocalStorage";
-import { tabsFromConsts } from "./consts";
-import { ContextProps, ITab } from "./types";
+import TabList from "./components/TabList/TabList";
 
-// const tabsFromLocalStorage = LocalStorage.getTabs();
-export const MyContext = createContext<ContextProps | null>(null);
+const tabsFromLocalStorage = LocalStorage.getTabs();
 
 function App() {
-	const [tabs, setTabs] = useState(tabsFromConsts);
-	const [selectedTab, setSelectedTab] = useState(tabs[0]);
+	const [tabs, setTabs] = useState(tabsFromLocalStorage);
+	const [activeTab, setActiveTab] = useState(tabs[0]);
+	const contextValue = {
+		tabs,
+		setTabs,
+		activeTab,
+		setActiveTab,
+	};
 
 	return (
-		<MyContext.Provider value={{ tabs, setTabs, selectedTab, setSelectedTab }}>
-			<div className={styles["container"]}>
+		<TabContext.Provider value={contextValue}>
+			<div className={styles.container}>
 				<TabList />
-
-				<ul>
-					{selectedTab ? (
-						selectedTab.tasks.map((task) => recursiveMap(task))
-					) : (
-						<>
-							<div>Список пуст</div>
-							<input type="text" />
-						</>
-					)}
-				</ul>
 			</div>
-		</MyContext.Provider>
+		</TabContext.Provider>
 	);
 }
 
