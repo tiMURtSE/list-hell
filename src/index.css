@@ -1,6 +1,8 @@
 :root {
 	--color-bisque: #ebe6e4;
 	--color-dark-bisque: #ebd3ca;
+
+	--border-radius-medium: 10px;
 }
 
 *,
@@ -10,6 +12,7 @@
 }
 
 body {
+	height: 100vh;
 	margin: 0;
 
 	font-family: monospace;

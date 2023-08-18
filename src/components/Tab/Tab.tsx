@@ -3,33 +3,47 @@ import classNames from "classnames";
 import styles from "./Tab.module.css";
 import { MyContext } from "../../App";
 import { ContextProps, ITab } from "../../types";
+import PopupMenu from "../PopupMenu/PopupMenu";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	tab: ITab;
 	isSelected: boolean;
 	setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
+	isSubmitting: boolean;
+	setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Tab({ tab, isSelected, setSelectedTab, ...props }: Props) {
+function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, ...props }: Props) {
 	const { tabs, setTabs } = useContext(MyContext) as ContextProps;
-	const [isSubmitting, setIsSubmitting] = useState(!tab.title ? true : false);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleClick = () => {
 		if (setSelectedTab) setSelectedTab(tab.title);
 
 		if (isSelected && !isSubmitting) {
-			const menu = document.getElementById(`menu-${tab.id}`) as HTMLDialogElement;
+			const popup = document.getElementById(`popup-${tab.id}`) as HTMLDialogElement;
 
-			if (menu) menu.showModal();
+			if (popup) popup.showModal();
 		}
 	};
 
 	const changeTabTitle = () => {
-		const menu = document.getElementById(`menu-${tab.id}`) as HTMLDialogElement;
+		const popup = document.getElementById(`popup-${tab.id}`) as HTMLDialogElement;
 
 		setIsSubmitting(true);
-		if (menu) menu.close();
+		if (popup) popup.close();
+	};
+
+	const deleteTab = () => {
+		const popup = document.getElementById(`popup-${tab.id}`) as HTMLDialogElement;
+
+		if (popup) {
+			const updatedTabs = tabs.filter((currentTab) => currentTab.id !== tab.id);
+
+			popup.close();
+			setTabs(updatedTabs);
+			setSelectedTab(tabs[0].title);
+		}
 	};
 
 	const handleSubmit = (event: any) => {
@@ -65,7 +79,7 @@ function Tab({ tab, isSelected, setSelectedTab, ...props }: Props) {
 	};
 
 	return (
-		<div>
+		<div className={styles.wrapper}>
 			<button
 				id={tab.id}
 				className={classNames(styles.tab, { [styles.selected]: isSelected })}
@@ -74,7 +88,7 @@ function Tab({ tab, isSelected, setSelectedTab, ...props }: Props) {
 				{...props}
 			>
 				<form onSubmit={handleSubmit}>
-					{isSubmitting ? (
+					{!tab.title || isSubmitting ? (
 						<input
 							type="text"
 							className={styles.input}
@@ -89,14 +103,11 @@ function Tab({ tab, isSelected, setSelectedTab, ...props }: Props) {
 				</form>
 			</button>
 
-			<dialog id={`menu-${tab.id}`}>
-				<div>
-					<ul>
-						<li onClick={changeTabTitle}>Изменить</li>
-						<li>Удалить</li>
-					</ul>
-				</div>
-			</dialog>
+			<PopupMenu
+				id={`popup-${tab.id}`}
+				deleteTab={deleteTab}
+				changeTabTitle={changeTabTitle}
+			/>
 		</div>
 	);
 }

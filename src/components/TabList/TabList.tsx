@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import NewTabButton from "../NewTabButton/NewTabButton";
 import Tab from "../Tab/Tab";
 import styles from "./TabList.module.css";
@@ -12,6 +12,7 @@ type Props = {
 
 function TabList({ selectedTab, setSelectedTab }: Props) {
 	const { tabs } = useContext(MyContext) as ContextProps;
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	return (
 		<div className={styles.tabs}>
@@ -20,11 +21,16 @@ function TabList({ selectedTab, setSelectedTab }: Props) {
 					tab={tab}
 					isSelected={selectedTab === tab.title}
 					setSelectedTab={setSelectedTab}
+					isSubmitting={isSubmitting}
+					setIsSubmitting={setIsSubmitting}
 					key={tab.id}
 				/>
 			))}
 
-			<NewTabButton />
+			<NewTabButton
+				isSubmitting={isSubmitting}
+				setIsSubmitting={setIsSubmitting}
+			/>
 		</div>
 	);
 }

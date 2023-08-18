@@ -1,14 +1,19 @@
 import { ButtonHTMLAttributes, useContext } from "react";
 import styles from "./NewTabButton.module.css";
 import { MyContext } from "../../App";
-import { ITab } from "../../types";
+import { ContextProps, ITab } from "../../types";
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+	isSubmitting: boolean;
+	setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-function NewTabButton({ ...props }: Props) {
-	const { tabs, setTabs } = useContext(MyContext);
+function NewTabButton({ isSubmitting, setIsSubmitting, ...props }: Props) {
+	const { tabs, setTabs } = useContext(MyContext) as ContextProps;
 
 	const addNewTab = () => {
+		if (isSubmitting) return;
+
 		const newTab = {
 			id: crypto.randomUUID(),
 			title: "",
@@ -16,6 +21,7 @@ function NewTabButton({ ...props }: Props) {
 		} as ITab;
 
 		setTabs([...tabs, newTab]);
+		setIsSubmitting(true);
 	};
 
 	return (

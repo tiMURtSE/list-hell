@@ -1,8 +1,12 @@
+.wrapper {
+	position: relative;
+}
+
 .tab {
 	max-width: 250px;
 	min-width: 160px;
 	padding: 15px;
-	border-radius: 10px;
+	border-radius: var(--border-radius-medium);
 
 	background-color: var(--color-bisque);
 

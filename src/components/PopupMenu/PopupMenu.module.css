@@ -1,0 +1,28 @@
+.backdrop {
+	border: none;
+
+	background-color: transparent;
+}
+
+.content {
+	padding: 15px 0;
+	border: 2px solid;
+	border-radius: var(--border-radius-medium);
+
+	background-color: #fff;
+}
+
+.list {
+	margin: 0;
+	padding: 0;
+}
+
+.list__item {
+	padding: 0 50px 0 15px;
+
+	cursor: pointer;
+}
+
+.list__item:hover {
+	background-color: var(--color-dark-bisque);
+}

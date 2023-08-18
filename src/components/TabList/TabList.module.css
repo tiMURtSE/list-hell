@@ -1,6 +1,4 @@
 .tabs {
 	display: flex;
 	gap: 5px;
-
-	overflow: scroll;
 }
