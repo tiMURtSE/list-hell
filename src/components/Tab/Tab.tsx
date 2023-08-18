@@ -10,7 +10,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 function Tab({ tab, ...props }: Props) {
-	const { setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
+	const { tabs, setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
 	const titleField = useRef<HTMLInputElement>(null);
 	const isTabActive = activeTab.id === tab.id;
 
@@ -22,6 +22,18 @@ function Tab({ tab, ...props }: Props) {
 		event.preventDefault();
 
 		const title = titleField.current?.value;
+		const isDuplicateTitle = tabs.some((item) => item.title === title);
+
+		if (!title) {
+			alert("Название темы не может быть пустым!");
+			return false;
+		}
+
+		if (isDuplicateTitle) {
+			alert("Такое названия темы уже занято!");
+			return false;
+		}
+
 		const newTab = { ...tab, title: title, isTitleChanging: false } as ITab;
 		const updatedTabs = LocalStorage.setTab(newTab) as ITab[];
 
@@ -40,6 +52,7 @@ function Tab({ tab, ...props }: Props) {
 					<input
 						type="text"
 						ref={titleField}
+						onBlur={submitNewTabTitle}
 						autoFocus
 					/>
 				</form>

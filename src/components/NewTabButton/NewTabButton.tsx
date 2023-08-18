@@ -7,10 +7,14 @@ import { LocalStorage } from "../../utils/LocalStorage";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
-function NewTabButton(props: Props) {
-	const { setTabs } = useContext(TabContext) as IContext;
+function NewTabButton({}: Props) {
+	const { tabs, setTabs } = useContext(TabContext) as IContext;
 
 	const addNewTab = () => {
+		const isTabTitleChanging = tabs.some((item) => item.isTitleChanging === true);
+
+		if (isTabTitleChanging) return;
+
 		const updatedTabs = LocalStorage.addTab("");
 
 		setTabs(updatedTabs);
