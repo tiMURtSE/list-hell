@@ -2,6 +2,7 @@ export interface ITab {
 	id: string;
 	title: string;
 	tasks: ITask[];
+	isTitleChanging: boolean;
 }
 
 export interface ITask {

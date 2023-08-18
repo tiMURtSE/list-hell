@@ -3,6 +3,7 @@ import Tab from "../Tab/Tab";
 import styles from "./TabList.module.css";
 import { IContext } from "../../types";
 import { TabContext } from "../../hooks/useContext";
+import NewTabButton from "../NewTabButton/NewTabButton";
 
 type Props = {};
 
@@ -17,6 +18,8 @@ function TabList({}: Props) {
 					key={tab.id}
 				/>
 			))}
+
+			<NewTabButton />
 		</div>
 	);
 }

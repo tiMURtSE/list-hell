@@ -15,7 +15,12 @@ export class LocalStorage {
 
 	static addTab(tabTitle: string) {
 		const tabs = localStorage.getItem("tabs");
-		const newTab = { id: crypto.randomUUID(), title: tabTitle, tasks: [] } as ITab;
+		const newTab = {
+			id: crypto.randomUUID(),
+			title: tabTitle,
+			tasks: [],
+			isTitleChanging: true,
+		} as ITab;
 
 		if (tabs) {
 			const parsedTabs = JSON.parse(tabs) as ITab[];

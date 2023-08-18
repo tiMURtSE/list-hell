@@ -31,6 +31,7 @@ export const tabsFromConsts: ITab[] = [
 				isCompleted: false,
 			},
 		],
+		isTitleChanging: false,
 	},
 	{
 		id: crypto.randomUUID(),
@@ -62,10 +63,12 @@ export const tabsFromConsts: ITab[] = [
 				isCompleted: true,
 			},
 		],
+		isTitleChanging: false,
 	},
 	{
 		id: crypto.randomUUID(),
 		title: "JavaScript",
 		tasks: [],
+		isTitleChanging: false,
 	},
 ];

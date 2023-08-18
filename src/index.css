@@ -4,7 +4,7 @@
 	--color-dark: #202124;
 	--color-light: #dfdfe0;
 
-	--border-radius-medium: 10px;
+	--border-radius-medium: 18px;
 }
 
 *,
@@ -28,6 +28,11 @@ button {
 	background-color: inherit;
 	color: inherit;
 	font: inherit;
+}
+
+button:focus-visible {
+	outline: 2px solid blue;
+	outline-offset: 3px;
 }
 
 li {
