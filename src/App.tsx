@@ -11,21 +11,16 @@ export const MyContext = createContext<ContextProps | null>(null);
 
 function App() {
 	const [tabs, setTabs] = useState(tabsFromConsts);
-
-	const [selectedTab, setSelectedTab] = useState(tabs.length ? tabs[0].title : "");
-	const currentOpenedTab = tabs ? tabs.find((tab) => tab.title === selectedTab) : null;
+	const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
 	return (
-		<MyContext.Provider value={{ tabs, setTabs }}>
+		<MyContext.Provider value={{ tabs, setTabs, selectedTab, setSelectedTab }}>
 			<div className={styles["container"]}>
-				<TabList
-					selectedTab={selectedTab}
-					setSelectedTab={setSelectedTab}
-				/>
+				<TabList />
 
 				<ul>
-					{currentOpenedTab?.tasks.length ? (
-						currentOpenedTab.tasks.map((task) => recursiveMap(task))
+					{selectedTab ? (
+						selectedTab.tasks.map((task) => recursiveMap(task))
 					) : (
 						<>
 							<div>Список пуст</div>

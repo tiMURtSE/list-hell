@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, useContext, useRef, useState } from "react";
+import { ButtonHTMLAttributes, useContext, useRef } from "react";
 import classNames from "classnames";
 import styles from "./Tab.module.css";
 import { MyContext } from "../../App";
@@ -7,18 +7,18 @@ import PopupMenu from "../PopupMenu/PopupMenu";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	tab: ITab;
-	isSelected: boolean;
-	setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
 	isSubmitting: boolean;
 	setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, ...props }: Props) {
-	const { tabs, setTabs } = useContext(MyContext) as ContextProps;
+function Tab({ tab, isSubmitting, setIsSubmitting, ...props }: Props) {
+	const { tabs, setTabs, selectedTab, setSelectedTab } = useContext(MyContext) as ContextProps;
 	const inputRef = useRef<HTMLInputElement>(null);
+	const isSelected = selectedTab?.id === tab.id;
+	const isNewTab = isSelected && !tab.title;
 
 	const handleClick = () => {
-		if (setSelectedTab) setSelectedTab(tab.title);
+		if (setSelectedTab) setSelectedTab(tab);
 
 		if (isSelected && !isSubmitting) {
 			const popup = document.getElementById(`popup-${tab.id}`) as HTMLDialogElement;
@@ -42,7 +42,7 @@ function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, .
 
 			popup.close();
 			setTabs(updatedTabs);
-			setSelectedTab(tabs[0].title);
+			setSelectedTab(tabs[0]);
 		}
 	};
 
@@ -60,7 +60,7 @@ function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, .
 
 				updatedTabs.pop();
 				setTabs(updatedTabs);
-				setSelectedTab(tabs[0].title);
+				setSelectedTab(tabs[0]);
 			} else {
 				const updatedTabs = tabs.map((currentTab) => {
 					if (currentTab.title === tab.title) {
@@ -71,7 +71,7 @@ function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, .
 				});
 
 				setTabs(updatedTabs);
-				setSelectedTab(value);
+				setSelectedTab({ ...tab, title: value });
 			}
 
 			setIsSubmitting(false);
@@ -79,7 +79,7 @@ function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, .
 	};
 
 	return (
-		<div className={styles.wrapper}>
+		<>
 			<button
 				id={tab.id}
 				className={classNames(styles.tab, { [styles.selected]: isSelected })}
@@ -88,7 +88,7 @@ function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, .
 				{...props}
 			>
 				<form onSubmit={handleSubmit}>
-					{!tab.title || isSubmitting ? (
+					{isNewTab ? (
 						<input
 							type="text"
 							className={styles.input}
@@ -108,7 +108,7 @@ function Tab({ tab, isSelected, setSelectedTab, isSubmitting, setIsSubmitting, .
 				deleteTab={deleteTab}
 				changeTabTitle={changeTabTitle}
 			/>
-		</div>
+		</>
 	);
 }
 

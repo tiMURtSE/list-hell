@@ -14,4 +14,6 @@ export interface ITask {
 export interface ContextProps {
 	tabs: ITab[];
 	setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
+	selectedTab: ITab;
+	setSelectedTab: React.Dispatch<React.SetStateAction<ITab>>;
 }

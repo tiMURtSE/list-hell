@@ -15,10 +15,10 @@ export class LocalStorage {
 
 	static addTab(tabTitle: string) {
 		const tabs = localStorage.getItem("tabs");
-		const newTab = { id: crypto.randomUUID(), title: tabTitle, tasks: [] };
+		const newTab = { id: crypto.randomUUID(), title: tabTitle, tasks: [] } as ITab;
 
 		if (tabs) {
-			const parsedTabs = JSON.parse(tabs);
+			const parsedTabs = JSON.parse(tabs) as ITab[];
 
 			parsedTabs.push(newTab);
 			localStorage.setItem("tabs", JSON.stringify(parsedTabs));
@@ -40,10 +40,11 @@ export class LocalStorage {
 			parsedTabs = parsedTabs.map((tab) => {
 				if (tab.id === updatedTab.id) {
 					return updatedTab;
-				} else {
-					return tab;
 				}
+
+				return tab;
 			});
+
 			localStorage.setItem("tabs", JSON.stringify(parsedTabs));
 			return parsedTabs;
 		} else {
