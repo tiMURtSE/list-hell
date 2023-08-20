@@ -9,7 +9,7 @@ export const tabsFromConsts: ITab[] = [
 				id: crypto.randomUUID(),
 				value: "Почитать",
 				subTasks: [],
-				isCompleted: false,
+				isCompleted: true,
 			},
 			{
 				id: crypto.randomUUID(),
@@ -41,7 +41,7 @@ export const tabsFromConsts: ITab[] = [
 				id: crypto.randomUUID(),
 				value: "Сходить к эдже",
 				subTasks: [],
-				isCompleted: true,
+				isCompleted: false,
 			},
 			{
 				id: crypto.randomUUID(),
@@ -60,7 +60,7 @@ export const tabsFromConsts: ITab[] = [
 						isCompleted: true,
 					},
 				],
-				isCompleted: true,
+				isCompleted: false,
 			},
 		],
 		isTitleChanging: false,

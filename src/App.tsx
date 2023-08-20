@@ -3,6 +3,8 @@ import styles from "./App.module.css";
 import { TabContext } from "./hooks/useContext";
 import { LocalStorage } from "./utils/LocalStorage";
 import TabList from "./components/TabList/TabList";
+import { recursiveMap } from "./utils/recursiveMap";
+import Tasks from "./components/Tasks/Tasks";
 
 const tabsFromLocalStorage = LocalStorage.getTabs();
 
@@ -20,6 +22,8 @@ function App() {
 		<TabContext.Provider value={contextValue}>
 			<div className={styles.container}>
 				<TabList />
+
+				<Tasks tasks={activeTab.tasks} />
 			</div>
 		</TabContext.Provider>
 	);

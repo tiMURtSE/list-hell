@@ -99,6 +99,7 @@ function Tab({ tab, ...props }: Props) {
 					<form onSubmit={submitNewTabTitle}>
 						<input
 							type="text"
+							defaultValue={tab.title}
 							ref={titleField}
 							onBlur={submitNewTabTitle}
 							autoFocus
