@@ -66,8 +66,6 @@ export class LocalStorage {
 			parsedTabs = parsedTabs.filter((tab) => tab.id !== tabToDelete.id);
 			localStorage.setItem("tabs", JSON.stringify(parsedTabs));
 			return parsedTabs;
-		} else {
-			return new Error("Ошибка: в хранилище нет такого таба для удаления");
 		}
 	}
 }
