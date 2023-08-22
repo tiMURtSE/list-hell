@@ -7,11 +7,10 @@ import { TabContext } from "../../hooks/useContext";
 import { LocalStorage } from "../../utils/LocalStorage";
 
 type Props = {
-	parentId: string;
 	tasks: ITask[];
 };
 
-function Tasks({ parentId, tasks }: Props) {
+function Tasks({ tasks }: Props) {
 	// const { setTabs, activeTab, setActiveTab, isChanging } = useContext(TabContext) as IContext;
 	// const [isNewTaskCreaing, setIsNewTaskCreaing] = useState(false);
 	// const inputRef = useRef<HTMLInputElement>(null);

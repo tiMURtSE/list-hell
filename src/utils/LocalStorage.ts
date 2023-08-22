@@ -13,14 +13,8 @@ export class LocalStorage {
 		}
 	}
 
-	static addTab(tabTitle: string) {
+	static addTab(newTab: ITab) {
 		const tabs = localStorage.getItem("tabs");
-		const newTab = {
-			id: crypto.randomUUID(),
-			title: tabTitle,
-			tasks: [],
-			isTitleChanging: true,
-		} as ITab;
 
 		if (tabs) {
 			const parsedTabs = JSON.parse(tabs) as ITab[];
@@ -37,24 +31,19 @@ export class LocalStorage {
 	}
 
 	static setTab(updatedTab: ITab) {
-		const tabs = localStorage.getItem("tabs");
+		const tabs = localStorage.getItem("tabs") as string;
+		let parsedTabs = JSON.parse(tabs) as ITab[];
 
-		if (tabs) {
-			let parsedTabs = JSON.parse(tabs) as ITab[];
+		parsedTabs = parsedTabs.map((tab) => {
+			if (tab.id === updatedTab.id) {
+				return updatedTab;
+			}
 
-			parsedTabs = parsedTabs.map((tab) => {
-				if (tab.id === updatedTab.id) {
-					return updatedTab;
-				}
+			return tab;
+		});
 
-				return tab;
-			});
-
-			localStorage.setItem("tabs", JSON.stringify(parsedTabs));
-			return parsedTabs;
-		} else {
-			return new Error("Ошибка: в хранилище нет такого таба для замены");
-		}
+		localStorage.setItem("tabs", JSON.stringify(parsedTabs));
+		return parsedTabs;
 	}
 
 	static deleteTab(tabToDelete: ITab) {

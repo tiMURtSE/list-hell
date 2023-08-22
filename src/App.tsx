@@ -10,7 +10,7 @@ const tabsFromLocalStorage = LocalStorage.getTabs();
 
 function App() {
 	const [tabs, setTabs] = useState(tabsFromLocalStorage);
-	const [activeTab, setActiveTab] = useState(tabs[0]);
+	const [activeTab, setActiveTab] = useState(tabs.length ? tabs[0] : null);
 	const [isChanging, setIsChanging] = useState(false);
 	const contextValue = {
 		tabs,
@@ -21,35 +21,36 @@ function App() {
 		setIsChanging,
 	};
 
-	const handleBackgroundClick = () => {
-		const newTask = {
-			id: crypto.randomUUID(),
-			value: "",
-			subTasks: [],
-			isCompleted: false,
-			isValueChanging: true,
-		} as ITask;
-		const updatedTasks = [...activeTab.tasks, newTask];
+	// const handleBackgroundClick = () => {
+	// 	const newTask = {
+	// 		id: crypto.randomUUID(),
+	// 		value: "",
+	// 		subTasks: [],
+	// 		isCompleted: false,
+	// 		isValueChanging: true,
+	// 	} as ITask;
+	// 	const updatedTasks = [...activeTab.tasks, newTask];
 
-		if (isChanging) return;
+	// 	if (isChanging) return;
 
-		setActiveTab({ ...activeTab, tasks: updatedTasks });
-	};
+	// 	setActiveTab({ ...activeTab, tasks: updatedTasks });
+	// };
 
 	return (
 		<TabContext.Provider value={contextValue}>
 			<div className={styles.container}>
 				<TabList />
 
-				<Tasks
-					parentId={activeTab.id}
-					tasks={activeTab.tasks}
-				/>
+				{/* {activeTab && (
+					<>
+						<Tasks tasks={activeTab.tasks} />
 
-				<div
-					className={styles["background"]}
-					onClick={handleBackgroundClick}
-				></div>
+						<div
+							className={styles["background"]}
+							onClick={handleBackgroundClick}
+						></div>
+					</>
+				)} */}
 			</div>
 		</TabContext.Provider>
 	);

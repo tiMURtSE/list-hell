@@ -4,20 +4,23 @@ import { ReactComponent as PlusIcon } from "../../assets/plus.svg";
 import { TabContext } from "../../hooks/useContext";
 import { IContext } from "../../types";
 import { LocalStorage } from "../../utils/LocalStorage";
+import { createNewTab } from "../../utils/createNewTab";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 function NewTabButton({}: Props) {
-	const { tabs, setTabs } = useContext(TabContext) as IContext;
+	const { tabs, setTabs, setActiveTab } = useContext(TabContext) as IContext;
 
 	const addNewTab = () => {
 		const isTabTitleChanging = tabs.some((item) => item.isTitleChanging === true);
 
 		if (isTabTitleChanging) return;
 
-		const updatedTabs = LocalStorage.addTab("");
-
+		const newTab = createNewTab();
+		const updatedTabs = LocalStorage.addTab(newTab);
+		console.log(updatedTabs);
 		setTabs(updatedTabs);
+		setActiveTab(updatedTabs[updatedTabs.length - 1]);
 	};
 
 	return (

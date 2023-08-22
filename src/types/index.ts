@@ -16,8 +16,8 @@ export interface ITask {
 export interface IContext {
 	tabs: ITab[];
 	setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
-	activeTab: ITab;
-	setActiveTab: React.Dispatch<React.SetStateAction<ITab>>;
+	activeTab: ITab | null;
+	setActiveTab: React.Dispatch<React.SetStateAction<ITab | null>>;
 	isChanging: boolean;
 	setIsChanging: React.Dispatch<React.SetStateAction<boolean>>;
 }
