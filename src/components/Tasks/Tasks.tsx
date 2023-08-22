@@ -1,4 +1,5 @@
 import { ITask } from "../../types";
+import Task from "./Task/Task";
 import styles from "./Tasks.module.css";
 import classNames from "classnames";
 
@@ -10,18 +11,12 @@ function Tasks({ tasks }: Props) {
 	return (
 		!!tasks.length && (
 			<ol>
-				{tasks.map((task) => {
-					return (
-						<li
-							className={classNames({ [styles.striked]: task.isCompleted })}
-							key={task.value}
-						>
-							{task.value}
-
-							{!!task.subTasks.length && <Tasks tasks={task.subTasks} />}
-						</li>
-					);
-				})}
+				{tasks.map((task) => (
+					<Task
+						task={task}
+						key={task.id}
+					/>
+				))}
 			</ol>
 		)
 	);

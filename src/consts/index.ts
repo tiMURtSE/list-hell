@@ -24,7 +24,20 @@ export const tabsFromConsts: ITab[] = [
 					{
 						id: crypto.randomUUID(),
 						value: "Протестировать",
-						subTasks: [],
+						subTasks: [
+							{
+								id: crypto.randomUUID(),
+								value: "Unit test",
+								subTasks: [],
+								isCompleted: false,
+							},
+							{
+								id: crypto.randomUUID(),
+								value: "Integ test",
+								subTasks: [],
+								isCompleted: false,
+							},
+						],
 						isCompleted: false,
 					},
 				],

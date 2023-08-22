@@ -55,7 +55,6 @@ function Tab({ tab, ...props }: Props) {
 	};
 
 	const changeTabTitle = () => {
-		const contextMenu = document.getElementById(contextMenuId) as HTMLDialogElement;
 		const updatedTabs = tabs.map((item) => {
 			if (item.id === tab.id) {
 				return { ...tab, isTitleChanging: true };
@@ -63,8 +62,6 @@ function Tab({ tab, ...props }: Props) {
 
 			return item;
 		});
-
-		if (contextMenu) contextMenu.close();
 
 		setTabs(updatedTabs);
 		setActiveTab(tab);
@@ -112,8 +109,8 @@ function Tab({ tab, ...props }: Props) {
 
 			<ContextMenu
 				id={contextMenuId}
-				changeTabTitle={changeTabTitle}
-				deleteTab={deleteTab}
+				changeItem={changeTabTitle}
+				deleteItem={deleteTab}
 			/>
 		</div>
 	);
