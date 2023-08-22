@@ -47,14 +47,12 @@ export class LocalStorage {
 	}
 
 	static deleteTab(tabToDelete: ITab) {
-		const tabs = localStorage.getItem("tabs");
+		const tabs = localStorage.getItem("tabs") as string;
 
-		if (tabs) {
-			let parsedTabs = JSON.parse(tabs) as ITab[];
+		let parsedTabs = JSON.parse(tabs) as ITab[];
 
-			parsedTabs = parsedTabs.filter((tab) => tab.id !== tabToDelete.id);
-			localStorage.setItem("tabs", JSON.stringify(parsedTabs));
-			return parsedTabs;
-		}
+		parsedTabs = parsedTabs.filter((tab) => tab.id !== tabToDelete.id);
+		localStorage.setItem("tabs", JSON.stringify(parsedTabs));
+		return parsedTabs;
 	}
 }

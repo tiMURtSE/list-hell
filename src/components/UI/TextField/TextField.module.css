@@ -1,0 +1,13 @@
+.input {
+	width: 170px;
+	border: none;
+
+	text-align: center;
+
+	background-color: transparent;
+	font: inherit;
+}
+
+.input:focus {
+	outline: none;
+}
