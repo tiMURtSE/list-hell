@@ -17,6 +17,23 @@ export class RecursiveArrayTraversal {
 		return tasksCopy;
 	};
 
+	static completeTask = (tasks: ITask[], taskToComplete: ITask) => {
+		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as ITask[];
+
+		for (let i = 0; i < tasksCopy.length; i++) {
+			if (tasksCopy[i].id === taskToComplete.id) {
+				tasksCopy[i] = taskToComplete;
+				break;
+			}
+
+			if (tasksCopy[i].subTasks.length) {
+				tasksCopy[i].subTasks = this.completeTask(tasksCopy[i].subTasks, taskToComplete);
+			}
+		}
+
+		return tasksCopy;
+	};
+
 	static setNewTaskValue = (tasks: ITask[], updatedTask: ITask) => {
 		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as ITask[];
 

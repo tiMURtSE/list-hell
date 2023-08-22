@@ -1,9 +1,11 @@
-import { useContext, useState, useRef, FormEvent } from "react";
+import { useContext, useState, useRef, FormEvent, MouseEvent } from "react";
 import { IContext, ITask } from "../../../types";
 import Tasks from "../Tasks";
 import { LocalStorage } from "../../../utils/LocalStorage";
 import { RecursiveArrayTraversal } from "../../../utils/RecursiveArrayTraversal";
 import { TabContext } from "../../../hooks/useContext";
+import classNames from "classnames";
+import styles from "./Task.module.css";
 
 type Props = {
 	task: ITask;
@@ -48,12 +50,31 @@ function Task({ task }: Props) {
 		}
 	};
 
-	const changeTaskValue = () => {
+	const changeTaskValue = (event: MouseEvent) => {
+		event.stopPropagation();
 		setIsValueChanging(!isValueChanging);
 	};
 
+	const completeTask = (event: MouseEvent) => {
+		event.stopPropagation();
+		event.preventDefault();
+		const tasks = activeTab?.tasks;
+
+		if (tasks) {
+			const updatedTask = { ...task, isCompleted: !task.isCompleted } as ITask;
+			const updatedTasks = RecursiveArrayTraversal.setNewTaskValue(tasks, updatedTask);
+			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
+
+			setActiveTab({ ...activeTab, tasks: updatedTasks });
+			setTabs(updatedTabs);
+		}
+	};
+
 	return (
-		<li onClick={changeTaskValue}>
+		<li
+			onClick={changeTaskValue}
+			onContextMenu={completeTask}
+		>
 			{isValueChanging ? (
 				<form onSubmit={handleSubmitNewTaskValue}>
 					<input
@@ -65,7 +86,9 @@ function Task({ task }: Props) {
 					/>
 				</form>
 			) : (
-				<span>{task.value}</span>
+				<span className={classNames({ [styles.striked]: task.isCompleted })}>
+					{task.value}
+				</span>
 			)}
 
 			{Boolean(task.subTasks) && <Tasks tasks={task.subTasks} />}
