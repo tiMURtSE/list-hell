@@ -1,10 +1,10 @@
 import { ButtonHTMLAttributes, useContext } from "react";
-import { IContext, ITab } from "../../types";
+import { IContext, ITab } from "../../../types";
 import styles from "./Tab.module.css";
 import classNames from "classnames";
-import { TabContext } from "../../hooks/useContext";
-import { LocalStorage } from "../../utils/LocalStorage";
-import TextField from "../UI/TextField/TextField";
+import { TabContext } from "../../../hooks/useContext";
+import { LocalStorage } from "../../../utils/LocalStorage";
+import TextField from "../../UI/TextField/TextField";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	tab: ITab;

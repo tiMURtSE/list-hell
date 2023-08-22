@@ -18,6 +18,6 @@ export interface IContext {
 	setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
 	activeTab: ITab | null;
 	setActiveTab: React.Dispatch<React.SetStateAction<ITab | null>>;
-	isChanging: boolean;
-	setIsChanging: React.Dispatch<React.SetStateAction<boolean>>;
+	// isChanging: boolean;
+	// setIsChanging: React.Dispatch<React.SetStateAction<boolean>>;
 }

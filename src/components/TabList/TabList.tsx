@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Tab from "../Tab/Tab";
+import Tab from "./Tab/Tab";
 import styles from "./TabList.module.css";
 import { IContext } from "../../types";
 import { TabContext } from "../../hooks/useContext";

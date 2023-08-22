@@ -1,78 +1,28 @@
-import { useRef, useContext, useState, FormEvent } from "react";
-import { IContext, ITab, ITask } from "../../types";
+import { ITab } from "../../types";
 import Task from "./Task/Task";
 import styles from "./Tasks.module.css";
-import classNames from "classnames";
-import { TabContext } from "../../hooks/useContext";
-import { LocalStorage } from "../../utils/LocalStorage";
 
 type Props = {
-	tasks: ITask[];
+	tab: ITab | null;
 };
 
-function Tasks({ tasks }: Props) {
-	// const { setTabs, activeTab, setActiveTab, isChanging } = useContext(TabContext) as IContext;
-	// const [isNewTaskCreaing, setIsNewTaskCreaing] = useState(false);
-	// const inputRef = useRef<HTMLInputElement>(null);
+function Tasks({ tab }: Props) {
+	const tasks = tab ? tab.tasks : null;
+
+	if (!tasks) return null;
 
 	return (
-		<ol className={styles["list"]}>
-			{tasks.map((task) => (
-				<Task
-					task={task}
-					key={task.id}
-				/>
-			))}
-		</ol>
+		<div className={styles["wrapper"]}>
+			<ol className={styles["list"]}>
+				{tasks.map((task) => (
+					<Task
+						task={task}
+						key={task.id}
+					/>
+				))}
+			</ol>
+		</div>
 	);
 }
 
 export default Tasks;
-// const addNewTask = (event: FormEvent) => {
-//     event.preventDefault();
-//     const input = inputRef.current;
-//     const taskNewValue = input?.value.trim();
-
-//     if (taskNewValue) {
-//         const newTask = {
-//             id: crypto.randomUUID(),
-//             value: taskNewValue,
-//             subTasks: [],
-//             isCompleted: false,
-//             isValueChanging: false,
-//         } as ITask;
-
-//         const func = (tasks: ITask[]) => {
-//             const updatedTasks = JSON.parse(JSON.stringify(tasks)) as ITask[];
-
-//             for (const task of updatedTasks) {
-//                 if (activeTab.id === parentId) {
-//                     updatedTasks.push(newTask);
-//                     break;
-//                 }
-
-//                 if (task.id === parentId) {
-//                     task.subTasks.push(newTask);
-//                     break;
-//                 }
-
-//                 if (task.subTasks.length) {
-//                     task.subTasks = func(task.subTasks);
-//                 }
-//             }
-
-//             return updatedTasks;
-//         };
-
-//         const updatedTasks = JSON.parse(JSON.stringify(func(activeTab.tasks)));
-//         const updatedTabs = LocalStorage.setTab({
-//             ...activeTab,
-//             tasks: updatedTasks,
-//         }) as ITab[];
-
-//         setActiveTab(updatedTabs.filter((tab) => tab.id === activeTab.id)[0]);
-//         setTabs(updatedTabs);
-//     }
-
-//     if (input) input.value = "";
-// };
