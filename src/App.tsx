@@ -23,7 +23,10 @@ function App() {
 			<div className={styles.container}>
 				<TabList />
 
-				<Tasks tasks={activeTab.tasks} />
+				<Tasks
+					parentId={activeTab.id}
+					tasks={activeTab.tasks}
+				/>
 			</div>
 		</TabContext.Provider>
 	);

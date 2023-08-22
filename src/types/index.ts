@@ -10,6 +10,7 @@ export interface ITask {
 	value: string;
 	subTasks: ITask[];
 	isCompleted: boolean;
+	isValueChanging: boolean;
 }
 
 export interface IContext {

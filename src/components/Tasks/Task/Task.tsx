@@ -3,7 +3,7 @@ import classNames from "classnames";
 import styles from "./Task.module.css";
 import Tasks from "../Tasks";
 import ContextMenu from "../../ContextMenu/ContextMenu";
-import { useContext } from "react";
+import { FormEvent, useContext, useRef } from "react";
 import { TabContext } from "../../../hooks/useContext";
 import { LocalStorage } from "../../../utils/LocalStorage";
 
@@ -11,8 +11,9 @@ type Props = { task: ITask };
 
 function Task({ task }: Props) {
 	// console.log({ value: task.value, isCompleted: task.isCompleted });
-	const { tabs, setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
+	const { setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
 	const { id, value, subTasks, isCompleted } = task;
+	const valueField = useRef<HTMLInputElement>(null);
 	const contextMenuId = `context-menu-${id}`;
 
 	const showContextMenu = () => {
@@ -79,15 +80,115 @@ function Task({ task }: Props) {
 		setTabs(updatedTabs);
 	};
 
-	const changeTabTitle = () => {};
+	const changeTaskValue = () => {
+		const func = (tasks: ITask[]) => {
+			const updatedTasks = JSON.parse(JSON.stringify(tasks)) as ITask[];
 
-	const deleteTab = () => {};
+			for (const task of updatedTasks) {
+				if (task.id === id) {
+					console.log(1);
+					task.isValueChanging = true;
+					break;
+				}
+
+				if (task.subTasks.length) {
+					task.subTasks = func(task.subTasks);
+				}
+			}
+
+			return updatedTasks;
+		};
+
+		const updatedTasks = JSON.parse(JSON.stringify(func(activeTab.tasks)));
+		const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks }) as ITab[];
+
+		setActiveTab(updatedTabs.filter((tab) => tab.id === activeTab.id)[0]);
+		setTabs(updatedTabs);
+	};
+
+	const deleteTab = () => {
+		const func = (tasks: ITask[]) => {
+			let updatedTasks = JSON.parse(JSON.stringify(tasks)) as ITask[];
+
+			updatedTasks = updatedTasks.filter((task) => {
+				if (task.subTasks.length) {
+					task.subTasks = func(task.subTasks);
+				}
+
+				if (task.id !== id) return task;
+			});
+
+			return updatedTasks;
+		};
+
+		const updatedTasks = JSON.parse(JSON.stringify(func(activeTab.tasks)));
+		const updatedTabs = LocalStorage.setTab({
+			...activeTab,
+			tasks: updatedTasks,
+		}) as ITab[];
+
+		setActiveTab(updatedTabs.filter((tab) => tab.id === activeTab.id)[0]);
+		setTabs(updatedTabs);
+	};
+
+	const submitNewTaskValue = (event: FormEvent) => {
+		event.preventDefault();
+
+		const newValue = valueField.current?.value;
+
+		if (newValue) {
+			const func = (tasks: ITask[]) => {
+				const updatedTasks = JSON.parse(JSON.stringify(tasks)) as ITask[];
+
+				for (const task of updatedTasks) {
+					if (task.id === id) {
+						task.value = newValue;
+						task.isValueChanging = false;
+						break;
+					}
+
+					if (task.subTasks.length) {
+						task.subTasks = func(task.subTasks);
+					}
+				}
+
+				return updatedTasks;
+			};
+
+			const updatedTasks = JSON.parse(JSON.stringify(func(activeTab.tasks)));
+			const updatedTabs = LocalStorage.setTab({
+				...activeTab,
+				tasks: updatedTasks,
+			}) as ITab[];
+
+			setActiveTab(updatedTabs.filter((tab) => tab.id === activeTab.id)[0]);
+			setTabs(updatedTabs);
+		}
+	};
 
 	return (
 		<li className={classNames(styles.task, { [styles.striked]: isCompleted })}>
-			{value}
+			{task.isValueChanging ? (
+				<form onSubmit={submitNewTaskValue}>
+					<input
+						type="text"
+						defaultValue={task.value}
+						ref={valueField}
+						onBlur={submitNewTaskValue}
+						autoFocus
+					/>
+				</form>
+			) : (
+				<span>{value}</span>
+			)}
 
-			{!!subTasks.length && <Tasks tasks={subTasks} />}
+			{!!subTasks.length && (
+				<Tasks
+					parentId={task.id}
+					tasks={subTasks}
+				/>
+			)}
+
 			<button
 				type="button"
 				className={styles["context-menu-button"]}
@@ -98,7 +199,7 @@ function Task({ task }: Props) {
 
 			<ContextMenu
 				id={contextMenuId}
-				changeItem={changeTabTitle}
+				changeItem={changeTaskValue}
 				deleteItem={deleteTab}
 				completeItem={completeItem}
 			/>

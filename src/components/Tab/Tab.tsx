@@ -27,13 +27,11 @@ function Tab({ tab, ...props }: Props) {
 		const isDuplicateTitle = tabs.some((item) => item.title === title);
 
 		if (!title) {
-			alert("Название темы не может быть пустым!");
-			return deleteTab();
+			return alert("Название темы не может быть пустым!");
 		}
 
 		if (isDuplicateTitle) {
-			alert("Такое названия темы уже занято!");
-			return deleteTab();
+			return alert("Такое названия темы уже занято!");
 		}
 
 		const newTab = { ...tab, title: title, isTitleChanging: false } as ITab;
