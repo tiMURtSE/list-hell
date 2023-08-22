@@ -5,6 +5,7 @@ import { LocalStorage } from "./utils/LocalStorage";
 import TabList from "./components/TabList/TabList";
 import Tasks from "./components/Tasks/Tasks";
 import { ReactComponent as PlusIcon } from "./assets/plus.svg";
+import { createNewTask } from "./utils/createNewTask";
 
 const tabsFromLocalStorage = LocalStorage.getTabs();
 
@@ -18,7 +19,18 @@ function App() {
 		setActiveTab,
 	};
 
-	const addNewTask = () => {};
+	const addNewTask = () => {
+		const newTask = createNewTask();
+		const tasks = activeTab?.tasks;
+
+		if (tasks) {
+			const updatedTasks = [...tasks, newTask];
+			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
+
+			setActiveTab({ ...activeTab, tasks: updatedTasks });
+			setTabs(updatedTabs);
+		}
+	};
 
 	return (
 		<TabContext.Provider value={contextValue}>

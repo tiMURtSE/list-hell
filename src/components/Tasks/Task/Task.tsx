@@ -1,4 +1,12 @@
-import { useContext, useState, useRef, FormEvent, MouseEvent } from "react";
+import {
+	useEffect,
+	useContext,
+	useState,
+	useRef,
+	FormEvent,
+	KeyboardEvent,
+	MouseEvent,
+} from "react";
 import { IContext, ITask } from "../../../types";
 import Tasks from "../Tasks";
 import { LocalStorage } from "../../../utils/LocalStorage";
@@ -69,6 +77,37 @@ function Task({ task }: Props) {
 			setTabs(updatedTabs);
 		}
 	};
+
+	useEffect(() => {
+		const updateNesting = (event: any) => {
+			const code = event.code;
+			const tasks = activeTab?.tasks;
+
+			if (code === "Tab" && !event.shiftKey && tasks) {
+				event.preventDefault();
+				const updatedTasks = RecursiveArrayTraversal.updateNesting(tasks, task);
+				const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
+
+				setActiveTab({ ...activeTab, tasks: updatedTasks });
+				setTabs(updatedTabs);
+				setIsValueChanging(!isValueChanging);
+			} else if (code === "Tab" && event.shiftKey && tasks) {
+				event.preventDefault();
+				// const updatedTasks = RecursiveArrayTraversal.reverseUpdateNesting(tasks, task);
+				// const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
+				// console.log(updatedTasks);
+				// // setActiveTab({ ...activeTab, tasks: updatedTasks });
+				// // setTabs(updatedTabs);
+				// // setIsValueChanging(!isValueChanging);
+			} else {
+				return;
+			}
+		};
+
+		if (isValueChanging) document.addEventListener("keydown", updateNesting);
+
+		return () => document.removeEventListener("keydown", updateNesting);
+	}, [isValueChanging]);
 
 	return (
 		<li
