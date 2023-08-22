@@ -3,15 +3,17 @@ import classNames from "classnames";
 import styles from "./Task.module.css";
 import Tasks from "../Tasks";
 import ContextMenu from "../../ContextMenu/ContextMenu";
-import { FormEvent, useContext, useRef } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useContext, useRef } from "react";
 import { TabContext } from "../../../hooks/useContext";
 import { LocalStorage } from "../../../utils/LocalStorage";
+import { findTaskPosition } from "../../../utils/traverseNestedArray";
+import { RecursiveArrayTraversal } from "../../../utils/RecursiveArrayTraversal";
 
 type Props = { task: ITask };
 
 function Task({ task }: Props) {
 	// console.log({ value: task.value, isCompleted: task.isCompleted });
-	const { setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
+	const { setTabs, activeTab, setActiveTab, setIsChanging } = useContext(TabContext) as IContext;
 	const { id, value, subTasks, isCompleted } = task;
 	const valueField = useRef<HTMLInputElement>(null);
 	const contextMenuId = `context-menu-${id}`;
@@ -86,7 +88,6 @@ function Task({ task }: Props) {
 
 			for (const task of updatedTasks) {
 				if (task.id === id) {
-					console.log(1);
 					task.isValueChanging = true;
 					break;
 				}
@@ -103,6 +104,7 @@ function Task({ task }: Props) {
 		const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks }) as ITab[];
 
 		setActiveTab(updatedTabs.filter((tab) => tab.id === activeTab.id)[0]);
+		setIsChanging(true);
 		setTabs(updatedTabs);
 	};
 
@@ -162,9 +164,41 @@ function Task({ task }: Props) {
 			}) as ITab[];
 
 			setActiveTab(updatedTabs.filter((tab) => tab.id === activeTab.id)[0]);
+			setIsChanging(false);
 			setTabs(updatedTabs);
+		} else {
+			deleteTab();
 		}
 	};
+
+	useEffect(() => {
+		const createNestedList = (event: any) => {
+			const code = event.code;
+
+			if (code === "Tab") {
+				event.preventDefault();
+				const taskPosition = findTaskPosition(activeTab.tasks, id);
+				if (taskPosition !== 0) {
+					const updatedTasks = RecursiveArrayTraversal.addToNestedList(
+						activeTab.tasks,
+						id
+					);
+
+					const updatedTabs = LocalStorage.setTab({
+						...activeTab,
+						tasks: updatedTasks,
+					}) as ITab[];
+					setActiveTab(updatedTabs.filter((tab) => tab.id === activeTab.id)[0]);
+					setTabs(updatedTabs);
+					// deleteTab();
+				}
+			}
+		};
+
+		if (task.isValueChanging) document.addEventListener("keydown", createNestedList);
+
+		return () => document.removeEventListener("keydown", createNestedList);
+	}, [task.isValueChanging]);
 
 	return (
 		<li className={classNames(styles.task, { [styles.striked]: isCompleted })}>
@@ -179,7 +213,7 @@ function Task({ task }: Props) {
 					/>
 				</form>
 			) : (
-				<span>{value}</span>
+				<span onClick={changeTaskValue}>{value}</span>
 			)}
 
 			{!!subTasks.length && (
