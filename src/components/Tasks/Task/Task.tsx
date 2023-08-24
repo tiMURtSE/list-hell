@@ -27,9 +27,9 @@ function Task({ task }: Props) {
 	const handleSubmitNewTaskValue = (event: FormEvent) => {
 		event.preventDefault();
 		const value = inputRef.current?.value;
+		const tasks = activeTab?.tasks;
 
-		if (value && activeTab) {
-			const tasks = activeTab.tasks;
+		if (value && tasks) {
 			const updatedTask = { ...task, value, isValueChanging: false } as ITask;
 			const updatedTasks = RecursiveArrayTraversal.setNewTaskValue(tasks, updatedTask);
 			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });

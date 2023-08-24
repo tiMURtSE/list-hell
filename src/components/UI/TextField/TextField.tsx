@@ -22,7 +22,7 @@ function TextField({ tab }: Props) {
 
 			setTabs(updatedTabs);
 		} else {
-			const isConfirmed = confirm("Темы без навзания будет удалена. Удалить тему?");
+			const isConfirmed = confirm("Темы без названия будет удалена. Удалить тему?");
 
 			if (isConfirmed) deleteTab();
 		}
