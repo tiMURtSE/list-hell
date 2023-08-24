@@ -1,12 +1,4 @@
-import {
-	useEffect,
-	useContext,
-	useState,
-	useRef,
-	FormEvent,
-	KeyboardEvent,
-	MouseEvent,
-} from "react";
+import { useEffect, useContext, useState, useRef, FormEvent, MouseEvent } from "react";
 import { IContext, ITask } from "../../../types";
 import Tasks from "../Tasks";
 import { LocalStorage } from "../../../utils/LocalStorage";
@@ -14,6 +6,7 @@ import { RecursiveArrayTraversal } from "../../../utils/RecursiveArrayTraversal"
 import { TabContext } from "../../../hooks/useContext";
 import classNames from "classnames";
 import styles from "./Task.module.css";
+import TextField from "../../UI/TextField/TextField";
 
 type Props = {
 	task: ITask;
@@ -24,7 +17,7 @@ function Task({ task }: Props) {
 	const [isValueChanging, setIsValueChanging] = useState(task.isValueChanging);
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const handleSubmitNewTaskValue = (event: FormEvent) => {
+	const submitNewTaskValue = (event: FormEvent) => {
 		event.preventDefault();
 		const value = inputRef.current?.value;
 		const tasks = activeTab?.tasks;
@@ -38,7 +31,7 @@ function Task({ task }: Props) {
 			setTabs(updatedTabs);
 			setIsValueChanging(!isValueChanging);
 		} else {
-			const isConfirmed = confirm("Темы без навзания будет удалена. Удалить тему?");
+			const isConfirmed = confirm("Задача без названия будет удалена. Удалить задачу?");
 
 			if (isConfirmed) deleteTask();
 		}
@@ -115,15 +108,11 @@ function Task({ task }: Props) {
 			onContextMenu={completeTask}
 		>
 			{isValueChanging ? (
-				<form onSubmit={handleSubmitNewTaskValue}>
-					<input
-						type="text"
-						defaultValue={task.value}
-						ref={inputRef}
-						onBlur={handleSubmitNewTaskValue}
-						autoFocus
-					/>
-				</form>
+				<TextField
+					defaultValue={task.value}
+					ref={inputRef}
+					handleSubmit={submitNewTaskValue}
+				/>
 			) : (
 				<span className={classNames({ [styles.striked]: task.isCompleted })}>
 					{task.value}
