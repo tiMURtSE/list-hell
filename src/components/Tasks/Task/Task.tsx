@@ -1,4 +1,12 @@
-import { useEffect, useContext, useState, useRef, FormEvent, MouseEvent } from "react";
+import {
+	useEffect,
+	useContext,
+	useState,
+	useRef,
+	FormEvent,
+	MouseEvent,
+	KeyboardEvent,
+} from "react";
 import { IContext, ITask } from "../../../types";
 import Tasks from "../Tasks";
 import { LocalStorage } from "../../../utils/LocalStorage";
@@ -15,25 +23,14 @@ type Props = {
 function Task({ task }: Props) {
 	const { setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
 	const [isValueChanging, setIsValueChanging] = useState(task.isValueChanging);
-	const inputRef = useRef<HTMLInputElement>(null);
+	const taskRef = useRef<HTMLSpanElement>(null);
 
-	const submitNewTaskValue = (event: FormEvent) => {
+	const submitNewTaskValue = (event: FormEvent | KeyboardEvent) => {
 		event.preventDefault();
-		const value = inputRef.current?.value;
-		const tasks = activeTab?.tasks;
+		const task = taskRef.current;
 
-		if (value && tasks) {
-			const updatedTask = { ...task, value, isValueChanging: false } as ITask;
-			const updatedTasks = RecursiveArrayTraversal.setNewTaskValue(tasks, updatedTask);
-			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
-
-			setActiveTab({ ...activeTab, tasks: updatedTasks });
-			setTabs(updatedTabs);
-			setIsValueChanging(!isValueChanging);
-		} else {
-			const isConfirmed = confirm("Задача без названия будет удалена. Удалить задачу?");
-
-			if (isConfirmed) deleteTask();
+		if (task) {
+			task.blur();
 		}
 	};
 
@@ -59,6 +56,7 @@ function Task({ task }: Props) {
 	const completeTask = (event: MouseEvent) => {
 		event.stopPropagation();
 		event.preventDefault();
+		const target = event.target as HTMLElement;
 		const tasks = activeTab?.tasks;
 
 		if (tasks) {
@@ -68,6 +66,7 @@ function Task({ task }: Props) {
 
 			setActiveTab({ ...activeTab, tasks: updatedTasks });
 			setTabs(updatedTabs);
+			target.blur();
 		}
 	};
 
@@ -92,6 +91,8 @@ function Task({ task }: Props) {
 				// // setActiveTab({ ...activeTab, tasks: updatedTasks });
 				// // setTabs(updatedTabs);
 				// // setIsValueChanging(!isValueChanging);
+			} else if (code === "Enter") {
+				event.preventDefault();
 			} else {
 				return;
 			}
@@ -102,22 +103,36 @@ function Task({ task }: Props) {
 		return () => document.removeEventListener("keydown", updateNesting);
 	}, [isValueChanging]);
 
+	const handleKeyDown = (event: KeyboardEvent) => {
+		const code = event.code;
+		const isShiftPressed = event.shiftKey;
+
+		if (code === "Enter") {
+			submitNewTaskValue(event);
+		} else if (code === "Tab") {
+			if (isShiftPressed) {
+			} else {
+			}
+		}
+	};
+
 	return (
 		<li
+			className={styles.task}
 			onClick={changeTaskValue}
-			onContextMenu={completeTask}
 		>
-			{isValueChanging ? (
-				<TextField
-					defaultValue={task.value}
-					ref={inputRef}
-					handleSubmit={submitNewTaskValue}
-				/>
-			) : (
-				<span className={classNames({ [styles.striked]: task.isCompleted })}>
+			{
+				<span
+					className={classNames({ [styles.striked]: task.isCompleted })}
+					onKeyDown={handleKeyDown}
+					onBlur={submitNewTaskValue}
+					ref={taskRef}
+					contentEditable
+					suppressContentEditableWarning
+				>
 					{task.value}
 				</span>
-			)}
+			}
 
 			{Boolean(task.subTasks) && <Tasks tasks={task.subTasks} />}
 		</li>

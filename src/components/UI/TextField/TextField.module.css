@@ -8,6 +8,10 @@
 	font: inherit;
 }
 
+.task {
+	color: var(--color-light);
+}
+
 .input:focus {
 	outline: none;
 }

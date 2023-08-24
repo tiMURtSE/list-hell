@@ -1,21 +1,20 @@
 import React, { FormEvent } from "react";
+import classNames from "classnames";
 import styles from "./TextField.module.css";
 
 type Props = {
 	defaultValue: string;
 	handleSubmit: (event: FormEvent) => void;
+	isTask?: boolean;
 };
 
 const TextField = React.forwardRef(
-	({ defaultValue, handleSubmit }: Props, ref: React.ForwardedRef<HTMLInputElement>) => {
+	({ defaultValue, handleSubmit, isTask }: Props, ref: React.ForwardedRef<HTMLInputElement>) => {
 		return (
-			<form
-				className={styles["form"]}
-				onSubmit={handleSubmit}
-			>
+			<form onSubmit={handleSubmit}>
 				<input
 					type="text"
-					className={styles["input"]}
+					className={classNames(styles.input, { [styles.task]: isTask })}
 					defaultValue={defaultValue}
 					ref={ref}
 					onBlur={handleSubmit}
