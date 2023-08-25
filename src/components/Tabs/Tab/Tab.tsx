@@ -1,13 +1,13 @@
 import { ButtonHTMLAttributes, useContext, useRef, FormEvent } from "react";
-import { IContext, ITab } from "../../../types";
+import { IContext, TabItem } from "../../../types";
 import styles from "./Tab.module.css";
 import classNames from "classnames";
 import { TabContext } from "../../../hooks/useContext";
-import { LocalStorage } from "../../../utils/LocalStorage";
 import TextField from "../../UI/TextField/TextField";
+import { DatabaseManager } from "../../../utils/DatabaseManager";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-	tab: ITab;
+	tab: TabItem;
 }
 
 function Tab({ tab, ...props }: Props) {
@@ -17,22 +17,27 @@ function Tab({ tab, ...props }: Props) {
 
 	const submitNewTabTitle = (event: FormEvent) => {
 		event.preventDefault();
-		const title = inputRef.current?.value;
+		const inputElement = inputRef.current;
+		const value = inputElement?.value;
 
-		if (title) {
-			const newTab = { ...tab, title, isTitleChanging: false } as ITab;
-			const updatedTabs = LocalStorage.setTab(newTab);
+		if (value) {
+			const newTab = { ...tab, value, isValueChanging: false } as TabItem;
+			const updatedTabs = DatabaseManager.changeTabValue(newTab);
 
 			setTabs(updatedTabs);
 		} else {
 			const isConfirmed = confirm("Темы без названия будет удалена. Удалить тему?");
 
-			if (isConfirmed) removeTab();
+			if (isConfirmed) {
+				removeTab();
+			} else {
+				setTimeout(() => inputElement?.focus(), 0);
+			}
 		}
 	};
 
 	const removeTab = () => {
-		const updatedTabs = LocalStorage.deleteTab(tab);
+		const updatedTabs = DatabaseManager.removeTab(tab);
 		const tabPosition = tabs.findIndex((item) => item.id === tab.id);
 
 		if (tabPosition) {
@@ -45,8 +50,8 @@ function Tab({ tab, ...props }: Props) {
 	};
 
 	const changeTabTitle = () => {
-		const newTab = { ...tab, isTitleChanging: true } as ITab;
-		const updatedTabs = LocalStorage.setTab(newTab);
+		const newTab = { ...tab, isValueChanging: true } as TabItem;
+		const updatedTabs = DatabaseManager.changeTabValue(newTab);
 
 		setActiveTab(tab);
 		setTabs(updatedTabs);
@@ -60,14 +65,14 @@ function Tab({ tab, ...props }: Props) {
 				onDoubleClick={changeTabTitle}
 				{...props}
 			>
-				{tab.isTitleChanging ? (
+				{tab.isValueChanging ? (
 					<TextField
-						defaultValue={tab.title}
+						defaultValue={tab.value}
 						ref={inputRef}
 						handleSubmit={submitNewTabTitle}
 					/>
 				) : (
-					<span>{tab.title}</span>
+					<span>{tab.value}</span>
 				)}
 			</button>
 		</div>

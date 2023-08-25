@@ -1,24 +1,26 @@
-import { useContext } from "react";
-import { IContext, ITask } from "../../types";
+import { useContext, useState } from "react";
+import { IContext, TaskItem } from "../../types";
 import Task from "./Task/Task";
 import styles from "./Tasks.module.css";
 import { TabContext } from "../../hooks/useContext";
 
 type Props = {
-	tasks: ITask[];
+	subarrayIndexes: number[];
+	tasks: TaskItem[];
 };
 
-function Tasks({ tasks }: Props) {
+function Tasks({ subarrayIndexes, tasks }: Props) {
 	const { activeTab } = useContext(TabContext) as IContext;
-
-	if (!activeTab) return null;
+	const [localTasks, setLocalTasks] = useState(tasks);
 
 	return (
 		<ol className={styles["list"]}>
-			{tasks.map((task) => (
+			{tasks.map((task, index) => (
 				<Task
 					task={task}
-					activeTab={activeTab}
+					localTasks={localTasks}
+					setLocalTasks={setLocalTasks}
+					subarrayIndexes={new Array(...subarrayIndexes, index)}
 					key={task.id}
 				/>
 			))}

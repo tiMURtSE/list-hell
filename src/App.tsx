@@ -2,16 +2,16 @@ import { useState } from "react";
 import styles from "./App.module.css";
 import { TabContext } from "./hooks/useContext";
 import { LocalStorage } from "./utils/LocalStorage";
-import TabList from "./components/TabList/TabList";
+import Tabs from "./components/Tabs/Tabs";
 import Tasks from "./components/Tasks/Tasks";
-import { ReactComponent as PlusIcon } from "./assets/plus.svg";
-import { createNewTask } from "./utils/createNewTask";
 
-const tabsFromLocalStorage = LocalStorage.getTabs();
+const tabsFromLocalStorage = LocalStorage.get().tabs;
+const taskListsFromLocalStorage = LocalStorage.get().taskLists;
 
 function App() {
 	const [tabs, setTabs] = useState(tabsFromLocalStorage);
 	const [activeTab, setActiveTab] = useState(tabs.length ? tabs[0] : null);
+	const taskList = taskListsFromLocalStorage.filter((list) => list.id === activeTab?.taskListId);
 	const contextValue = {
 		tabs,
 		setTabs,
@@ -19,32 +19,17 @@ function App() {
 		setActiveTab,
 	};
 
-	const addNewTask = () => {
-		const newTask = createNewTask();
-		const tasks = activeTab?.tasks;
-
-		if (tasks) {
-			const updatedTasks = [...tasks, newTask];
-			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
-
-			setActiveTab({ ...activeTab, tasks: updatedTasks });
-			setTabs(updatedTabs);
-		}
-	};
-
 	return (
 		<TabContext.Provider value={contextValue}>
 			<div className={styles.container}>
-				<TabList />
+				<Tabs />
 
-				{activeTab?.tasks && <Tasks tasks={activeTab.tasks} />}
-
-				<button
-					className={styles["new-task-button"]}
-					onClick={addNewTask}
-				>
-					<PlusIcon />
-				</button>
+				{taskList && (
+					<Tasks
+						subarrayIndexes={[]}
+						tasks={taskList}
+					/>
+				)}
 			</div>
 		</TabContext.Provider>
 	);

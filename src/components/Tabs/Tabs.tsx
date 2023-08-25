@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import Tab from "./Tab/Tab";
-import styles from "./TabList.module.css";
+import styles from "./Tabs.module.css";
 import { IContext } from "../../types";
 import { TabContext } from "../../hooks/useContext";
 import NewTabButton from "../NewTabButton/NewTabButton";
 
 type Props = {};
 
-function TabList({}: Props) {
+function Tabs({}: Props) {
 	const { tabs } = useContext(TabContext) as IContext;
 
 	return (
@@ -24,4 +24,4 @@ function TabList({}: Props) {
 	);
 }
 
-export default TabList;
+export default Tabs;

@@ -1,10 +1,10 @@
-import { ITab } from "../types";
+import { TabItem } from "../types";
 
 export const createNewTab = () => {
 	return {
 		id: crypto.randomUUID(),
-		title: "",
-		tasks: [],
-		isTitleChanging: true,
-	} as ITab;
+		value: "",
+		taskListId: "",
+		isValueChanging: true,
+	} as TabItem;
 };

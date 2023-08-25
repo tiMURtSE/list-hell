@@ -3,8 +3,8 @@ import styles from "./NewTabButton.module.css";
 import { ReactComponent as PlusIcon } from "../../assets/plus.svg";
 import { TabContext } from "../../hooks/useContext";
 import { IContext } from "../../types";
-import { LocalStorage } from "../../utils/LocalStorage";
 import { createNewTab } from "../../utils/createNewTab";
+import { DatabaseManager } from "../../utils/DatabaseManager";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
@@ -12,15 +12,16 @@ function NewTabButton({}: Props) {
 	const { tabs, setTabs, setActiveTab } = useContext(TabContext) as IContext;
 
 	const addNewTab = () => {
-		const isTabTitleChanging = tabs.some((item) => item.isTitleChanging === true);
+		const areSomeTabValuesChanging = tabs.some((item) => item.isValueChanging);
 
-		if (isTabTitleChanging) return;
+		if (!areSomeTabValuesChanging) {
+			const newTab = createNewTab();
+			const updatedTabs = DatabaseManager.addTab(newTab);
+			const lastIndex = updatedTabs.length - 1;
 
-		const newTab = createNewTab();
-		const updatedTabs = LocalStorage.addTab(newTab);
-		console.log(updatedTabs);
-		setTabs(updatedTabs);
-		setActiveTab(updatedTabs[updatedTabs.length - 1]);
+			setTabs(updatedTabs);
+			setActiveTab(updatedTabs[lastIndex]);
+		}
 	};
 
 	return (

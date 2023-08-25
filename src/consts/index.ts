@@ -1,10 +1,32 @@
-import { ITab } from "../types";
+import { TabItem, TaskItem } from "../types";
 
-export const tabsFromConsts: ITab[] = [
+export const STORAGE_NAME = "list-hell";
+
+export const tabsFromConsts: TabItem[] = [
 	{
-		id: crypto.randomUUID(),
-		title: "Сегодня",
-		tasks: [
+		id: "1",
+		value: "Сегодня",
+		taskListId: "11",
+		isValueChanging: false,
+	},
+	{
+		id: "2",
+		value: "Неделя",
+		taskListId: "22",
+		isValueChanging: false,
+	},
+	{
+		id: "3",
+		value: "JavaScript",
+		taskListId: "33",
+		isValueChanging: false,
+	},
+];
+
+export const tasksFromConsts: { id: string; taskList: TaskItem[] }[] = [
+	{
+		id: "fdsfs",
+		taskList: [
 			{
 				id: crypto.randomUUID(),
 				value: "Почитать",
@@ -50,12 +72,10 @@ export const tabsFromConsts: ITab[] = [
 				isValueChanging: false,
 			},
 		],
-		isTitleChanging: false,
 	},
 	{
-		id: crypto.randomUUID(),
-		title: "Неделя",
-		tasks: [
+		id: "22",
+		taskList: [
 			{
 				id: crypto.randomUUID(),
 				value: "Сходить к эдже",
@@ -86,12 +106,9 @@ export const tabsFromConsts: ITab[] = [
 				isValueChanging: false,
 			},
 		],
-		isTitleChanging: false,
 	},
 	{
-		id: crypto.randomUUID(),
-		title: "JavaScript",
-		tasks: [],
-		isTitleChanging: false,
+		id: "33",
+		taskList: [],
 	},
 ];

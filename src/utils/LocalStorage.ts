@@ -1,38 +1,44 @@
-import { ITab } from "../types";
+import { STORAGE_NAME } from "../consts";
+import { TabItem, LocalStorageData } from "../types";
 
 export class LocalStorage {
-	static getTabs() {
-		const tabs = localStorage.getItem("tabs");
+	static get() {
+		const stringifiedData = localStorage.getItem(STORAGE_NAME);
 
-		if (tabs) {
-			const parsedTabs = JSON.parse(tabs) as ITab[];
+		if (stringifiedData) {
+			const data = JSON.parse(stringifiedData) as LocalStorageData;
 
-			return parsedTabs;
+			return data;
 		} else {
-			return [];
+			const data = { tabs: [], taskLists: [] } as LocalStorageData;
+			const stringifiedData = JSON.stringify(data);
+
+			localStorage.setItem(STORAGE_NAME, JSON.stringify(stringifiedData));
+			return data;
 		}
 	}
 
-	static addTab(newTab: ITab) {
-		const tabs = localStorage.getItem("tabs");
+	static set(data: LocalStorageData) {
+		const stringifiedData = JSON.stringify(data);
 
-		if (tabs) {
-			const parsedTabs = JSON.parse(tabs) as ITab[];
-
-			parsedTabs.push(newTab);
-			localStorage.setItem("tabs", JSON.stringify(parsedTabs));
-			return parsedTabs;
-		} else {
-			const tabs = [newTab];
-
-			localStorage.setItem("tabs", JSON.stringify(tabs));
-			return tabs;
-		}
+		localStorage.setItem(STORAGE_NAME, stringifiedData);
 	}
 
-	static setTab(updatedTab: ITab) {
+	/////////////////////////////////////////////////////////////
+
+	static removeTab(tabToRemove: TabItem) {
 		const tabs = localStorage.getItem("tabs") as string;
-		let parsedTabs = JSON.parse(tabs) as ITab[];
+
+		let parsedTabs = JSON.parse(tabs) as TabItem[];
+
+		parsedTabs = parsedTabs.filter((tab) => tab.id !== tabToRemove.id);
+		localStorage.setItem("tabs", JSON.stringify(parsedTabs));
+		return parsedTabs;
+	}
+
+	static setTab(updatedTab: TabItem) {
+		const tabs = localStorage.getItem("tabs") as string;
+		let parsedTabs = JSON.parse(tabs) as TabItem[];
 
 		parsedTabs = parsedTabs.map((tab) => {
 			if (tab.id === updatedTab.id) {
@@ -42,16 +48,6 @@ export class LocalStorage {
 			return tab;
 		});
 
-		localStorage.setItem("tabs", JSON.stringify(parsedTabs));
-		return parsedTabs;
-	}
-
-	static deleteTab(tabToDelete: ITab) {
-		const tabs = localStorage.getItem("tabs") as string;
-
-		let parsedTabs = JSON.parse(tabs) as ITab[];
-
-		parsedTabs = parsedTabs.filter((tab) => tab.id !== tabToDelete.id);
 		localStorage.setItem("tabs", JSON.stringify(parsedTabs));
 		return parsedTabs;
 	}
