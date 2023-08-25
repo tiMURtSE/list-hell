@@ -7,7 +7,7 @@ import {
 	MouseEvent,
 	KeyboardEvent,
 } from "react";
-import { IContext, ITask } from "../../../types";
+import { IContext, ITab, ITask } from "../../../types";
 import Tasks from "../Tasks";
 import { LocalStorage } from "../../../utils/LocalStorage";
 import { RecursiveArrayTraversal } from "../../../utils/RecursiveArrayTraversal";
@@ -18,39 +18,49 @@ import TextField from "../../UI/TextField/TextField";
 
 type Props = {
 	task: ITask;
+	activeTab: ITab;
 };
 
-function Task({ task }: Props) {
-	const { setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
-	const [isValueChanging, setIsValueChanging] = useState(task.isValueChanging);
-	const taskRef = useRef<HTMLSpanElement>(null);
+function Task({ task, activeTab }: Props) {
+	const { setTabs, setActiveTab } = useContext(TabContext) as IContext;
+	const taskRef = useRef<HTMLDivElement>(null);
 
 	const submitNewTaskValue = (event: FormEvent | KeyboardEvent) => {
 		event.preventDefault();
-		const task = taskRef.current;
+		const taskElement = taskRef.current;
+		const value = taskElement?.textContent;
+		const tasks = activeTab.tasks;
 
-		if (task) {
-			task.blur();
+		if (value) {
+			const updatedTask = { ...task, value, isValueChanging: false } as ITask;
+			const updatedTasks = RecursiveArrayTraversal.setNewTaskValue(tasks, updatedTask);
+			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
+
+			taskElement.blur();
+			setActiveTab({ ...activeTab, tasks: updatedTasks });
+			setTabs(updatedTabs);
+		} else {
+			const isConfirmed = confirm("Задача без названия будет удалена. Удалить задачу?");
+
+			if (isConfirmed) {
+				deleteTask();
+			} else {
+				if (taskElement) {
+					setTimeout(() => {
+						taskElement.focus();
+					}, 0);
+				}
+			}
 		}
 	};
 
 	const deleteTask = () => {
-		const tasks = activeTab?.tasks;
+		const tasks = activeTab.tasks;
+		const updatedTasks = RecursiveArrayTraversal.deleteTask(tasks, task);
+		const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
 
-		if (tasks) {
-			const updatedTasks = RecursiveArrayTraversal.deleteTask(tasks, task);
-			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
-
-			setActiveTab({ ...activeTab, tasks: updatedTasks });
-			setTabs(updatedTabs);
-			setIsValueChanging(!isValueChanging);
-		} else {
-		}
-	};
-
-	const changeTaskValue = (event: MouseEvent) => {
-		event.stopPropagation();
-		setIsValueChanging(!isValueChanging);
+		setActiveTab({ ...activeTab, tasks: updatedTasks });
+		setTabs(updatedTabs);
 	};
 
 	const completeTask = (event: MouseEvent) => {
@@ -70,38 +80,31 @@ function Task({ task }: Props) {
 		}
 	};
 
-	useEffect(() => {
-		const updateNesting = (event: any) => {
-			const code = event.code;
-			const tasks = activeTab?.tasks;
+	const updateNesting = (event: any) => {
+		const code = event.code;
+		const tasks = activeTab?.tasks;
 
-			if (code === "Tab" && !event.shiftKey && tasks) {
-				event.preventDefault();
-				const updatedTasks = RecursiveArrayTraversal.updateNesting(tasks, task);
-				const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
+		if (code === "Tab" && !event.shiftKey && tasks) {
+			event.preventDefault();
+			const updatedTasks = RecursiveArrayTraversal.updateNesting(tasks, task);
+			const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
 
-				setActiveTab({ ...activeTab, tasks: updatedTasks });
-				setTabs(updatedTabs);
-				setIsValueChanging(!isValueChanging);
-			} else if (code === "Tab" && event.shiftKey && tasks) {
-				event.preventDefault();
-				// const updatedTasks = RecursiveArrayTraversal.reverseUpdateNesting(tasks, task);
-				// const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
-				// console.log(updatedTasks);
-				// // setActiveTab({ ...activeTab, tasks: updatedTasks });
-				// // setTabs(updatedTabs);
-				// // setIsValueChanging(!isValueChanging);
-			} else if (code === "Enter") {
-				event.preventDefault();
-			} else {
-				return;
-			}
-		};
-
-		if (isValueChanging) document.addEventListener("keydown", updateNesting);
-
-		return () => document.removeEventListener("keydown", updateNesting);
-	}, [isValueChanging]);
+			setActiveTab({ ...activeTab, tasks: updatedTasks });
+			setTabs(updatedTabs);
+		} else if (code === "Tab" && event.shiftKey && tasks) {
+			event.preventDefault();
+			// const updatedTasks = RecursiveArrayTraversal.reverseUpdateNesting(tasks, task);
+			// const updatedTabs = LocalStorage.setTab({ ...activeTab, tasks: updatedTasks });
+			// console.log(updatedTasks);
+			// // setActiveTab({ ...activeTab, tasks: updatedTasks });
+			// // setTabs(updatedTabs);
+			// // setIsValueChanging(!isValueChanging);
+		} else if (code === "Enter") {
+			event.preventDefault();
+		} else {
+			return;
+		}
+	};
 
 	const handleKeyDown = (event: KeyboardEvent) => {
 		const code = event.code;
@@ -117,13 +120,13 @@ function Task({ task }: Props) {
 	};
 
 	return (
-		<li
-			className={styles.task}
-			onClick={changeTaskValue}
-		>
+		<li className={styles.task}>
 			{
-				<span
+				<div
+					id={`my-button-${task.id}`}
 					className={classNames({ [styles.striked]: task.isCompleted })}
+					tabIndex={1}
+					autoFocus
 					onKeyDown={handleKeyDown}
 					onBlur={submitNewTaskValue}
 					ref={taskRef}
@@ -131,7 +134,7 @@ function Task({ task }: Props) {
 					suppressContentEditableWarning
 				>
 					{task.value}
-				</span>
+				</div>
 			}
 
 			{Boolean(task.subTasks) && <Tasks tasks={task.subTasks} />}
