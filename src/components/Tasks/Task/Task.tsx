@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { TaskItem } from "../../../types";
 import Tasks from "../Tasks";
 import classNames from "classnames";
@@ -11,13 +12,16 @@ type Props = {
 };
 
 function Task({ task, localTasks, setLocalTasks, subarrayIndexes }: Props) {
+	const textField = useRef<HTMLDivElement>(null);
+
+	if (task.isValueChanging) textField.current?.focus();
 	return (
 		<li className={styles.task}>
 			{
 				<div
 					id={`my-button-${task.id}`}
 					className={classNames({ [styles.striked]: task.isCompleted })}
-					tabIndex={1}
+					ref={textField}
 					autoFocus
 					contentEditable
 					suppressContentEditableWarning

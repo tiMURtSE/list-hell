@@ -1,5 +1,6 @@
 import { TabItem, TaskItem, TaskList } from "../types";
 import { LocalStorage } from "./LocalStorage";
+import { createNewTask } from "./createNewTask";
 
 export class DatabaseManager {
 	static addTab(newTab: TabItem) {
@@ -61,5 +62,19 @@ export class DatabaseManager {
 	// 	return localStorageData.taskLists;
 	// }
 
-	static addTask() {}
+	static addTask(taskListId: string) {
+		const localStorageData = LocalStorage.get();
+		const newTask = createNewTask();
+
+		localStorageData.taskLists.map((taskList) => {
+			if (taskList.id === taskListId) {
+				taskList.tasks.push(newTask);
+
+				return taskList;
+			}
+		});
+
+		LocalStorage.set(localStorageData);
+		return localStorageData.taskLists.find((taskList) => taskList.id === taskListId)?.tasks;
+	}
 }

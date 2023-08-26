@@ -1,16 +1,14 @@
-import { useContext, useState } from "react";
-import { IContext, TaskItem } from "../../types";
+import { useState } from "react";
+import { TaskItem } from "../../types";
 import Task from "./Task/Task";
 import styles from "./Tasks.module.css";
-import { TabContext } from "../../hooks/useContext";
 
 type Props = {
-	subarrayIndexes: number[];
 	tasks: TaskItem[];
+	subarrayIndexes: number[];
 };
 
-function Tasks({ subarrayIndexes, tasks }: Props) {
-	const { activeTab } = useContext(TabContext) as IContext;
+function Tasks({ tasks, subarrayIndexes }: Props) {
 	const [localTasks, setLocalTasks] = useState(tasks);
 
 	return (

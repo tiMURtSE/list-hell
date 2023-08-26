@@ -1,4 +1,4 @@
-import { TabItem, TaskItem, TaskList } from "../types";
+import { LocalStorageData, TabItem, TaskItem, TaskList } from "../types";
 
 export const STORAGE_NAME = "list-hell";
 
@@ -25,7 +25,7 @@ export const tabsFromConsts: TabItem[] = [
 
 export const tasksFromConsts: TaskList[] = [
 	{
-		id: "fdsfs",
+		id: "11",
 		tasks: [
 			{
 				id: crypto.randomUUID(),
@@ -112,3 +112,8 @@ export const tasksFromConsts: TaskList[] = [
 		tasks: [],
 	},
 ];
+
+export const mockValues: LocalStorageData = {
+	tabs: tabsFromConsts,
+	taskLists: tasksFromConsts,
+};
