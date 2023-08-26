@@ -6,7 +6,7 @@ import Tabs from "./components/Tabs/Tabs";
 import Tasks from "./components/Tasks/Tasks";
 import { ReactComponent as PlusIcon } from "./assets/plus.svg";
 import { DatabaseManager } from "./utils/DatabaseManager";
-import { STORAGE_NAME, mockValues } from "./consts";
+import { mockValues } from "./consts";
 
 LocalStorage.set(mockValues);
 const tabsFromLocalStorage = LocalStorage.get().tabs;

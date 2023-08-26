@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { TaskItem } from "../../../types";
 import Tasks from "../Tasks";
 import classNames from "classnames";
@@ -14,21 +14,22 @@ type Props = {
 function Task({ task, localTasks, setLocalTasks, subarrayIndexes }: Props) {
 	const textField = useRef<HTMLDivElement>(null);
 
-	if (task.isValueChanging) textField.current?.focus();
+	useEffect(() => {
+		if (task.isValueChanging) textField.current?.focus();
+	}, [task.isValueChanging]);
+
 	return (
 		<li className={styles.task}>
-			{
-				<div
-					id={`my-button-${task.id}`}
-					className={classNames({ [styles.striked]: task.isCompleted })}
-					ref={textField}
-					autoFocus
-					contentEditable
-					suppressContentEditableWarning
-				>
-					{task.value}
-				</div>
-			}
+			<div
+				id={`my-button-${task.id}`}
+				className={classNames({ [styles.striked]: task.isCompleted })}
+				ref={textField}
+				onFocus={() => console.log("gets focus")}
+				contentEditable
+				suppressContentEditableWarning
+			>
+				{task.value}
+			</div>
 
 			{Boolean(task.subTasks) && (
 				<Tasks
