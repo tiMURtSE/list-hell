@@ -11,7 +11,6 @@ type Props = {
 };
 
 function Task({ task, localTasks, setLocalTasks, subarrayIndexes }: Props) {
-	console.log(subarrayIndexes);
 	return (
 		<li className={styles.task}>
 			{

@@ -1,11 +1,13 @@
-import { TabItem } from "../types";
+import { TabItem, TaskItem, TaskList } from "../types";
 import { LocalStorage } from "./LocalStorage";
 
 export class DatabaseManager {
 	static addTab(newTab: TabItem) {
 		const localStorageData = LocalStorage.get();
+		const newTaskList = { id: newTab.taskListId, tasks: [] } as TaskList;
 
 		localStorageData.tabs.push(newTab);
+		localStorageData.taskLists.push(newTaskList);
 
 		LocalStorage.set(localStorageData);
 		return localStorageData.tabs;
@@ -16,6 +18,9 @@ export class DatabaseManager {
 		const updatedTabs = localStorageData.tabs.filter((tab) => tab.id !== tabToRemove.id);
 
 		localStorageData.tabs = updatedTabs;
+		localStorageData.taskLists = localStorageData.taskLists.filter(
+			(taskList) => taskList.id !== tabToRemove.taskListId
+		);
 
 		LocalStorage.set(localStorageData);
 		return localStorageData.tabs;
@@ -34,4 +39,27 @@ export class DatabaseManager {
 		LocalStorage.set(localStorageData);
 		return localStorageData.tabs;
 	}
+
+	// static addTaskList(taskListId: string) {
+	// 	const localStorageData = LocalStorage.get();
+	// 	const newTaskList = { id: taskListId, tasks: [] } as TaskList;
+
+	// 	localStorageData.taskLists.push(newTaskList);
+
+	// 	LocalStorage.set(localStorageData);
+	// 	return localStorageData.taskLists;
+	// }
+
+	// static removeTaskList(taskListId: string) {
+	// 	const localStorageData = LocalStorage.get();
+
+	// 	localStorageData.taskLists = localStorageData.taskLists.filter(
+	// 		(taskList) => taskList.id !== taskListId
+	// 	);
+
+	// 	LocalStorage.set(localStorageData);
+	// 	return localStorageData.taskLists;
+	// }
+
+	static addTask() {}
 }

@@ -13,7 +13,7 @@ export class LocalStorage {
 			const data = { tabs: [], taskLists: [] } as LocalStorageData;
 			const stringifiedData = JSON.stringify(data);
 
-			localStorage.setItem(STORAGE_NAME, JSON.stringify(stringifiedData));
+			localStorage.setItem(STORAGE_NAME, stringifiedData);
 			return data;
 		}
 	}

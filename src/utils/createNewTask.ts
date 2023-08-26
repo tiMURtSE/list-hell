@@ -1,4 +1,4 @@
-import { ITask } from "../types";
+import { TaskItem } from "../types";
 
 export const createNewTask = () => {
 	return {
@@ -7,5 +7,5 @@ export const createNewTask = () => {
 		isCompleted: false,
 		isValueChanging: true,
 		subTasks: [],
-	} as ITask;
+	} as TaskItem;
 };

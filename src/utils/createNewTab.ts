@@ -4,7 +4,7 @@ export const createNewTab = () => {
 	return {
 		id: crypto.randomUUID(),
 		value: "",
-		taskListId: "",
+		taskListId: crypto.randomUUID(),
 		isValueChanging: true,
 	} as TabItem;
 };

@@ -1,4 +1,4 @@
-import { TabItem, TaskItem } from "../types";
+import { TabItem, TaskItem, TaskList } from "../types";
 
 export const STORAGE_NAME = "list-hell";
 
@@ -23,10 +23,10 @@ export const tabsFromConsts: TabItem[] = [
 	},
 ];
 
-export const tasksFromConsts: { id: string; taskList: TaskItem[] }[] = [
+export const tasksFromConsts: TaskList[] = [
 	{
 		id: "fdsfs",
-		taskList: [
+		tasks: [
 			{
 				id: crypto.randomUUID(),
 				value: "Почитать",
@@ -75,7 +75,7 @@ export const tasksFromConsts: { id: string; taskList: TaskItem[] }[] = [
 	},
 	{
 		id: "22",
-		taskList: [
+		tasks: [
 			{
 				id: crypto.randomUUID(),
 				value: "Сходить к эдже",
@@ -109,6 +109,6 @@ export const tasksFromConsts: { id: string; taskList: TaskItem[] }[] = [
 	},
 	{
 		id: "33",
-		taskList: [],
+		tasks: [],
 	},
 ];

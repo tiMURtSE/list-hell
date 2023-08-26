@@ -25,6 +25,7 @@ function Tab({ tab, ...props }: Props) {
 			const updatedTabs = DatabaseManager.changeTabValue(newTab);
 
 			setTabs(updatedTabs);
+			setActiveTab(newTab);
 		} else {
 			const isConfirmed = confirm("Темы без названия будет удалена. Удалить тему?");
 

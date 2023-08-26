@@ -1,6 +1,6 @@
 export interface LocalStorageData {
 	tabs: TabItem[];
-	taskLists: TaskItem[];
+	taskLists: TaskList[];
 }
 
 export interface TabItem {
@@ -16,6 +16,11 @@ export interface TaskItem {
 	subTasks: TaskItem[];
 	isCompleted: boolean;
 	isValueChanging: boolean;
+}
+
+export interface TaskList {
+	id: string;
+	tasks: TaskItem[];
 }
 
 export interface IContext {
