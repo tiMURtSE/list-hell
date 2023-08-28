@@ -1,13 +1,13 @@
 import { TaskItem } from "../types";
 
 export class RecursiveArrayTraversal {
-	static deleteTask = (tasks: TaskItem[], taskToDelete: TaskItem) => {
+	static removeTask = (tasks: TaskItem[], taskToDelete: TaskItem) => {
 		let tasksCopy = JSON.parse(JSON.stringify(tasks)) as TaskItem[];
 
 		tasksCopy = tasksCopy.filter((task) => {
 			if (task.id !== taskToDelete.id) {
 				if (task.subTasks.length) {
-					task.subTasks = this.deleteTask(task.subTasks, taskToDelete);
+					task.subTasks = this.removeTask(task.subTasks, taskToDelete);
 				}
 
 				return task;

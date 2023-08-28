@@ -32,6 +32,14 @@ function App() {
 		}
 	};
 
+	const addNewTask = () => {
+		if (activeTab) {
+			const updatedTasks = DatabaseManager.addTask(activeTab.taskListId);
+
+			setTasks(updatedTasks);
+		}
+	};
+
 	const contextValue = {
 		tabs,
 		setTabs,
@@ -41,14 +49,7 @@ function App() {
 		setActiveTab,
 		changeActiveTab,
 		updateTasks,
-	};
-
-	const addNewTask = () => {
-		if (activeTab) {
-			const updatedTasks = DatabaseManager.addTask(activeTab.taskListId);
-
-			setTasks(updatedTasks);
-		}
+		addNewTask,
 	};
 
 	return (

@@ -5,6 +5,7 @@ export const STORAGE_NAME = "list-hell";
 export enum Keys {
 	ENTER = "Enter",
 	TAB = "Tab",
+	BACKSPACE = "Backspace",
 }
 
 export const tabsFromConsts: TabItem[] = [

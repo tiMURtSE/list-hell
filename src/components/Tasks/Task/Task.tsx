@@ -6,6 +6,8 @@ import styles from "./Task.module.css";
 import { TabContext } from "../../../hooks/useContext";
 import { RecursiveArrayTraversal } from "../../../utils/RecursiveArrayTraversal";
 import { Keys } from "../../../consts";
+import { isCaretAtEnd } from "../../../utils/isCaretAtEnd";
+import { focusLastItem } from "../../../utils/focusLastItem";
 
 type Props = {
 	task: TaskItem;
@@ -13,7 +15,7 @@ type Props = {
 };
 
 function Task({ task, subarrayIndexes }: Props) {
-	const { tasks, setTasks, updateTasks } = useContext(TabContext) as IContext;
+	const { tasks, updateTasks, addNewTask } = useContext(TabContext) as IContext;
 	const textField = useRef<HTMLDivElement>(null);
 
 	const submitNewValue = () => {
@@ -31,15 +33,15 @@ function Task({ task, subarrayIndexes }: Props) {
 			const isConfirmed = confirm("Задача без названия будет удалена. Удалить задачу?");
 
 			if (isConfirmed) {
-				deleteTask();
+				removeTask();
+			} else {
+				setTimeout(() => textFieldElem?.focus(), 0);
 			}
-
-			// return alert("Не указано наименование задачи!");
 		}
 	};
 
-	const deleteTask = () => {
-		const updatedTasks = RecursiveArrayTraversal.deleteTask(tasks!, task);
+	const removeTask = () => {
+		const updatedTasks = RecursiveArrayTraversal.removeTask(tasks!, task);
 
 		updateTasks(updatedTasks);
 	};
@@ -49,7 +51,12 @@ function Task({ task, subarrayIndexes }: Props) {
 		const isShiftPressed = event.shiftKey;
 
 		if (code === Keys.ENTER) {
+			event.preventDefault();
 			const textFieldElem = textField.current;
+
+			if (textFieldElem && isCaretAtEnd(textFieldElem)) {
+				return addNewTask();
+			}
 
 			return textFieldElem?.blur();
 		}
@@ -61,6 +68,17 @@ function Task({ task, subarrayIndexes }: Props) {
 				return;
 			}
 		}
+
+		if (code === Keys.BACKSPACE) {
+			const value = textField.current?.textContent;
+
+			if (!value) {
+				const taskId = `my-button-${task.id}`;
+
+				removeTask();
+				return focusLastItem(taskId, styles.task);
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -68,10 +86,10 @@ function Task({ task, subarrayIndexes }: Props) {
 	}, []);
 
 	return (
-		<li className={styles.task}>
+		<li>
 			<div
 				id={`my-button-${task.id}`}
-				className={classNames({ [styles.striked]: task.isCompleted })}
+				className={classNames(styles.task, { [styles.striked]: task.isCompleted })}
 				ref={textField}
 				onBlur={submitNewValue}
 				onKeyDown={handleKeyDown}
