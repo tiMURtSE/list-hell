@@ -11,7 +11,9 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 function Tab({ tab, ...props }: Props) {
-	const { tabs, setTabs, activeTab, setActiveTab } = useContext(TabContext) as IContext;
+	const { tabs, setTabs, activeTab, setActiveTab, changeActiveTab } = useContext(
+		TabContext
+	) as IContext;
 	const inputRef = useRef<HTMLInputElement>(null);
 	const isTabActive = activeTab?.id === tab.id;
 
@@ -62,7 +64,7 @@ function Tab({ tab, ...props }: Props) {
 		<div className={styles.wrapper}>
 			<button
 				className={classNames(styles.tab, { [styles.active]: isTabActive })}
-				onClick={() => setActiveTab(tab)}
+				onClick={() => changeActiveTab(tab)}
 				onDoubleClick={changeTabTitle}
 				{...props}
 			>

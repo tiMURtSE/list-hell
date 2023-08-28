@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./App.module.css";
 import { TabContext } from "./hooks/useContext";
 import { LocalStorage } from "./utils/LocalStorage";
@@ -7,6 +7,7 @@ import Tasks from "./components/Tasks/Tasks";
 import { ReactComponent as PlusIcon } from "./assets/plus.svg";
 import { DatabaseManager } from "./utils/DatabaseManager";
 import { mockValues } from "./consts";
+import { TabItem } from "./types";
 
 LocalStorage.set(mockValues);
 const tabsFromLocalStorage = LocalStorage.get().tabs;
@@ -16,13 +17,24 @@ function App() {
 	const [tabs, setTabs] = useState(tabsFromLocalStorage);
 	const [activeTab, setActiveTab] = useState(tabs.length ? tabs[0] : null);
 	const taskList = taskListsFromLocalStorage.find((list) => list.id === activeTab?.taskListId);
-	const [tasks, setTasks] = useState(taskList?.tasks);
+	const [tasks, setTasks] = useState(taskList ? taskList.tasks : null);
+
+	const changeActiveTab = (tab: TabItem) => {
+		const taskLists = LocalStorage.get().taskLists;
+		const taskList = taskLists.find((list) => list.id === tab.taskListId);
+
+		setActiveTab(tab);
+		setTasks(taskList ? taskList.tasks : null);
+	};
 
 	const contextValue = {
 		tabs,
 		setTabs,
+		tasks,
+		setTasks,
 		activeTab,
 		setActiveTab,
+		changeActiveTab,
 	};
 
 	const addNewTask = () => {
@@ -32,15 +44,6 @@ function App() {
 			setTasks(updatedTasks);
 		}
 	};
-
-	useEffect(() => {
-		if (activeTab) {
-			const taskLists = LocalStorage.get().taskLists;
-			const taskList = taskLists.find((list) => list.id === activeTab.taskListId);
-
-			setTasks(taskList?.tasks);
-		}
-	}, [activeTab]);
 
 	return (
 		<TabContext.Provider value={contextValue}>

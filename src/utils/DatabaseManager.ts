@@ -65,16 +65,18 @@ export class DatabaseManager {
 	static addTask(taskListId: string) {
 		const localStorageData = LocalStorage.get();
 		const newTask = createNewTask();
+		let updatedTasks = [] as TaskItem[];
 
 		localStorageData.taskLists.map((taskList) => {
 			if (taskList.id === taskListId) {
 				taskList.tasks.push(newTask);
-
+				updatedTasks = taskList.tasks;
 				return taskList;
 			}
+			return taskList;
 		});
 
 		LocalStorage.set(localStorageData);
-		return localStorageData.taskLists.find((taskList) => taskList.id === taskListId)?.tasks;
+		return updatedTasks;
 	}
 }

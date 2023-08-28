@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { TaskItem } from "../../types";
 import Task from "./Task/Task";
 import styles from "./Tasks.module.css";
@@ -9,16 +8,14 @@ type Props = {
 };
 
 function Tasks({ tasks, subarrayIndexes }: Props) {
-	const [localTasks, setLocalTasks] = useState(tasks);
+	const getIndexes = (index: number) => [...subarrayIndexes, index];
 
 	return (
 		<ol className={styles["list"]}>
 			{tasks.map((task, index) => (
 				<Task
 					task={task}
-					localTasks={localTasks}
-					setLocalTasks={setLocalTasks}
-					subarrayIndexes={new Array(...subarrayIndexes, index)}
+					subarrayIndexes={getIndexes(index)}
 					key={task.id}
 				/>
 			))}

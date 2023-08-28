@@ -27,7 +27,10 @@ export interface IContext {
 	tabs: TabItem[];
 	setTabs: React.Dispatch<React.SetStateAction<TabItem[]>>;
 	activeTab: TabItem | null;
+	tasks: TaskItem[] | null;
+	setTasks: React.Dispatch<React.SetStateAction<TaskItem[] | null>>;
 	setActiveTab: React.Dispatch<React.SetStateAction<TabItem | null>>;
+	changeActiveTab: (tab: TabItem) => void;
 	// isChanging: boolean;
 	// setIsChanging: React.Dispatch<React.SetStateAction<boolean>>;
 }
