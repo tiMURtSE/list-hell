@@ -7,9 +7,9 @@ import Tasks from "./components/Tasks/Tasks";
 import { ReactComponent as PlusIcon } from "./assets/plus.svg";
 import { DatabaseManager } from "./utils/DatabaseManager";
 import { mockValues } from "./consts";
-import { TabItem } from "./types";
+import { TabItem, TaskItem } from "./types";
 
-LocalStorage.set(mockValues);
+// LocalStorage.set(mockValues);
 const tabsFromLocalStorage = LocalStorage.get().tabs;
 const taskListsFromLocalStorage = LocalStorage.get().taskLists;
 
@@ -27,6 +27,13 @@ function App() {
 		setTasks(taskList ? taskList.tasks : null);
 	};
 
+	const updateTasks = (tasks: TaskItem[]) => {
+		if (activeTab) {
+			DatabaseManager.setTasks(tasks, activeTab?.taskListId);
+			setTasks(tasks);
+		}
+	};
+
 	const contextValue = {
 		tabs,
 		setTabs,
@@ -35,6 +42,7 @@ function App() {
 		activeTab,
 		setActiveTab,
 		changeActiveTab,
+		updateTasks,
 	};
 
 	const addNewTask = () => {

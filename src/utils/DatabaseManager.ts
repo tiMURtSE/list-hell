@@ -41,33 +41,12 @@ export class DatabaseManager {
 		return localStorageData.tabs;
 	}
 
-	// static addTaskList(taskListId: string) {
-	// 	const localStorageData = LocalStorage.get();
-	// 	const newTaskList = { id: taskListId, tasks: [] } as TaskList;
-
-	// 	localStorageData.taskLists.push(newTaskList);
-
-	// 	LocalStorage.set(localStorageData);
-	// 	return localStorageData.taskLists;
-	// }
-
-	// static removeTaskList(taskListId: string) {
-	// 	const localStorageData = LocalStorage.get();
-
-	// 	localStorageData.taskLists = localStorageData.taskLists.filter(
-	// 		(taskList) => taskList.id !== taskListId
-	// 	);
-
-	// 	LocalStorage.set(localStorageData);
-	// 	return localStorageData.taskLists;
-	// }
-
 	static addTask(taskListId: string) {
 		const localStorageData = LocalStorage.get();
 		const newTask = createNewTask();
 		let updatedTasks = [] as TaskItem[];
 
-		localStorageData.taskLists.map((taskList) => {
+		localStorageData.taskLists = localStorageData.taskLists.map((taskList) => {
 			if (taskList.id === taskListId) {
 				taskList.tasks.push(newTask);
 				updatedTasks = taskList.tasks;
@@ -78,5 +57,20 @@ export class DatabaseManager {
 
 		LocalStorage.set(localStorageData);
 		return updatedTasks;
+	}
+
+	static setTasks(tasks: TaskItem[], taskListId: string) {
+		const localStorageData = LocalStorage.get();
+
+		localStorageData.taskLists = localStorageData.taskLists.map((taskList) => {
+			if (taskList.id === taskListId) {
+				console.log({ ...taskList, tasks });
+				return { ...taskList, tasks };
+			}
+
+			return taskList;
+		});
+
+		LocalStorage.set(localStorageData);
 	}
 }

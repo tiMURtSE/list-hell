@@ -1,8 +1,8 @@
-import { ITask } from "../types";
+import { TaskItem } from "../types";
 
 export class RecursiveArrayTraversal {
-	static deleteTask = (tasks: ITask[], taskToDelete: ITask) => {
-		let tasksCopy = JSON.parse(JSON.stringify(tasks)) as ITask[];
+	static deleteTask = (tasks: TaskItem[], taskToDelete: TaskItem) => {
+		let tasksCopy = JSON.parse(JSON.stringify(tasks)) as TaskItem[];
 
 		tasksCopy = tasksCopy.filter((task) => {
 			if (task.id !== taskToDelete.id) {
@@ -17,8 +17,8 @@ export class RecursiveArrayTraversal {
 		return tasksCopy;
 	};
 
-	static completeTask = (tasks: ITask[], taskToComplete: ITask) => {
-		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as ITask[];
+	static completeTask = (tasks: TaskItem[], taskToComplete: TaskItem) => {
+		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as TaskItem[];
 
 		for (let i = 0; i < tasksCopy.length; i++) {
 			if (tasksCopy[i].id === taskToComplete.id) {
@@ -34,8 +34,8 @@ export class RecursiveArrayTraversal {
 		return tasksCopy;
 	};
 
-	static setNewTaskValue = (tasks: ITask[], updatedTask: ITask) => {
-		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as ITask[];
+	static setNewTaskValue = (tasks: TaskItem[], updatedTask: TaskItem) => {
+		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as TaskItem[];
 
 		for (let i = 0; i < tasksCopy.length; i++) {
 			if (tasksCopy[i].id === updatedTask.id) {
@@ -51,8 +51,8 @@ export class RecursiveArrayTraversal {
 		return tasksCopy;
 	};
 
-	static updateNesting = (tasks: ITask[], targetTask: ITask) => {
-		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as ITask[];
+	static updateNesting = (tasks: TaskItem[], targetTask: TaskItem) => {
+		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as TaskItem[];
 		const result = [];
 
 		for (let i = 0; i < tasksCopy.length; i++) {
@@ -73,8 +73,8 @@ export class RecursiveArrayTraversal {
 		return result;
 	};
 
-	static reverseUpdateNesting = (tasks: ITask[], targetTask: ITask) => {
-		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as ITask[];
+	static reverseUpdateNesting = (tasks: TaskItem[], targetTask: TaskItem) => {
+		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as TaskItem[];
 		const result = [];
 
 		for (let i = 0; i < tasksCopy.length; i++) {

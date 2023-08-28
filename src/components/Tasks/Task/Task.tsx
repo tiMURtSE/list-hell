@@ -4,6 +4,9 @@ import Tasks from "../Tasks";
 import classNames from "classnames";
 import styles from "./Task.module.css";
 import { TabContext } from "../../../hooks/useContext";
+import { RecursiveArrayTraversal } from "../../../utils/RecursiveArrayTraversal";
+import { LocalStorage } from "../../../utils/LocalStorage";
+import { DatabaseManager } from "../../../utils/DatabaseManager";
 
 type Props = {
 	task: TaskItem;
@@ -11,18 +14,17 @@ type Props = {
 };
 
 function Task({ task, subarrayIndexes }: Props) {
-	const { tasks, setTasks } = useContext(TabContext) as IContext;
+	const { tasks, setTasks, updateTasks } = useContext(TabContext) as IContext;
 	const textField = useRef<HTMLDivElement>(null);
 
 	const handleSubmitNewValue = () => {
 		const value = textField.current?.textContent;
 
 		if (value && tasks) {
-			let result = tasks as any;
+			const updatedTask = { ...task, value } as TaskItem;
+			const updatedTasks = RecursiveArrayTraversal.setNewTaskValue(tasks, updatedTask);
 
-			for (const index of subarrayIndexes) {
-				result = result[index];
-			}
+			updateTasks(updatedTasks);
 		} else {
 			return alert("Не указано наименование задачи!");
 		}
