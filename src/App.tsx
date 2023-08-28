@@ -6,10 +6,8 @@ import Tabs from "./components/Tabs/Tabs";
 import Tasks from "./components/Tasks/Tasks";
 import { ReactComponent as PlusIcon } from "./assets/plus.svg";
 import { DatabaseManager } from "./utils/DatabaseManager";
-import { mockValues } from "./consts";
 import { TabItem, TaskItem } from "./types";
 
-// LocalStorage.set(mockValues);
 const tabsFromLocalStorage = LocalStorage.get().tabs;
 const taskListsFromLocalStorage = LocalStorage.get().taskLists;
 
@@ -58,7 +56,7 @@ function App() {
 			<div className={styles.container}>
 				<Tabs />
 
-				{tasks && (
+				{!!tasks?.length && (
 					<Tasks
 						tasks={tasks}
 						subarrayIndexes={[]}

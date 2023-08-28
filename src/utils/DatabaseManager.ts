@@ -64,7 +64,6 @@ export class DatabaseManager {
 
 		localStorageData.taskLists = localStorageData.taskLists.map((taskList) => {
 			if (taskList.id === taskListId) {
-				console.log({ ...taskList, tasks });
 				return { ...taskList, tasks };
 			}
 

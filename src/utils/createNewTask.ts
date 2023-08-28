@@ -5,7 +5,6 @@ export const createNewTask = () => {
 		id: crypto.randomUUID(),
 		value: "",
 		isCompleted: false,
-		isValueChanging: true,
 		subTasks: [],
 	} as TaskItem;
 };

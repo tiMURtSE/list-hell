@@ -15,7 +15,6 @@ export interface TaskItem {
 	value: string;
 	subTasks: TaskItem[];
 	isCompleted: boolean;
-	isValueChanging: boolean;
 }
 
 export interface TaskList {

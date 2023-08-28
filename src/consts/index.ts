@@ -1,6 +1,11 @@
-import { LocalStorageData, TabItem, TaskItem, TaskList } from "../types";
+import { LocalStorageData, TabItem, TaskList } from "../types";
 
 export const STORAGE_NAME = "list-hell";
+
+export enum Keys {
+	ENTER = "Enter",
+	TAB = "Tab",
+}
 
 export const tabsFromConsts: TabItem[] = [
 	{
@@ -32,7 +37,6 @@ export const tasksFromConsts: TaskList[] = [
 				value: "Почитать",
 				subTasks: [],
 				isCompleted: true,
-				isValueChanging: false,
 			},
 			{
 				id: crypto.randomUUID(),
@@ -43,7 +47,6 @@ export const tasksFromConsts: TaskList[] = [
 						value: "Составить план",
 						subTasks: [],
 						isCompleted: false,
-						isValueChanging: false,
 					},
 					{
 						id: crypto.randomUUID(),
@@ -54,22 +57,18 @@ export const tasksFromConsts: TaskList[] = [
 								value: "Unit test",
 								subTasks: [],
 								isCompleted: false,
-								isValueChanging: false,
 							},
 							{
 								id: crypto.randomUUID(),
 								value: "Integ test",
 								subTasks: [],
 								isCompleted: false,
-								isValueChanging: false,
 							},
 						],
 						isCompleted: false,
-						isValueChanging: false,
 					},
 				],
 				isCompleted: false,
-				isValueChanging: false,
 			},
 		],
 	},
@@ -81,7 +80,6 @@ export const tasksFromConsts: TaskList[] = [
 				value: "Сходить к эдже",
 				subTasks: [],
 				isCompleted: false,
-				isValueChanging: false,
 			},
 			{
 				id: crypto.randomUUID(),
@@ -92,18 +90,15 @@ export const tasksFromConsts: TaskList[] = [
 						value: "Купить порошок",
 						subTasks: [],
 						isCompleted: false,
-						isValueChanging: false,
 					},
 					{
 						id: crypto.randomUUID(),
 						value: "Выбрать вещи",
 						subTasks: [],
 						isCompleted: true,
-						isValueChanging: false,
 					},
 				],
 				isCompleted: false,
-				isValueChanging: false,
 			},
 		],
 	},
