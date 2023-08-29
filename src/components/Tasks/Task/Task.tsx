@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, KeyboardEvent } from "react";
+import { useContext, useEffect, useRef, KeyboardEvent, MouseEvent } from "react";
 import { IContext, TaskItem } from "../../../types";
 import Tasks from "../Tasks";
 import classNames from "classnames";
@@ -65,7 +65,10 @@ function Task({ task, subarrayIndexes }: Props) {
 			if (isShiftPressed) {
 				return;
 			} else {
-				return;
+				event.preventDefault();
+				const updatedTasks = RecursiveArrayTraversal.updateNesting(tasks!, task);
+
+				return updateTasks(updatedTasks);
 			}
 		}
 
@@ -81,8 +84,25 @@ function Task({ task, subarrayIndexes }: Props) {
 		}
 	};
 
+	const completeTask = (event: MouseEvent) => {
+		event.preventDefault();
+		const target = event.target as HTMLElement;
+
+		const updatedTask = { ...task, isCompleted: !task.isCompleted } as TaskItem;
+		const updatedTasks = RecursiveArrayTraversal.completeTask(tasks!, updatedTask);
+
+		target.blur();
+		updateTasks(updatedTasks);
+	};
+
+	const preventFocus = (event: MouseEvent) => {
+		const button = event.button;
+
+		if (button === 2) event.preventDefault();
+	};
+
 	useEffect(() => {
-		if (!task.value) textField.current?.focus();
+		if (task) textField.current?.focus();
 	}, []);
 
 	return (
@@ -93,6 +113,8 @@ function Task({ task, subarrayIndexes }: Props) {
 				ref={textField}
 				onBlur={submitNewValue}
 				onKeyDown={handleKeyDown}
+				onContextMenu={completeTask}
+				onMouseDown={preventFocus}
 				contentEditable
 				suppressContentEditableWarning
 			>

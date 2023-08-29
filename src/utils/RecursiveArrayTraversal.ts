@@ -58,8 +58,8 @@ export class RecursiveArrayTraversal {
 		for (let i = 0; i < tasksCopy.length; i++) {
 			if (tasksCopy[i].id === targetTask.id) {
 				if (i !== 0) {
-					tasksCopy[i - 1].subTasks.unshift(tasksCopy[i]);
-					break;
+					tasksCopy[i - 1].subTasks.push(tasksCopy[i]);
+					continue;
 				}
 			}
 
