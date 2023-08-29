@@ -1,6 +1,6 @@
-import { ITask } from "../types";
+import { TaskItem } from "../types";
 
-export const recursiveMap = (task: ITask) => {
+export const recursiveMap = (task: TaskItem) => {
 	if (task.subTasks.length) {
 		return (
 			<li key={task.id}>

@@ -1,6 +1,6 @@
-import { ITask } from "../types";
+import { TaskItem } from "../types";
 
-export const findTaskPosition = (tasks: ITask[], targetTaskId: string) => {
+export const findTaskPosition = (tasks: TaskItem[], targetTaskId: string) => {
 	let taskPosition;
 
 	for (const task of tasks) {

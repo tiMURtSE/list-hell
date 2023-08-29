@@ -32,6 +32,4 @@ export interface IContext {
 	changeActiveTab: (tab: TabItem) => void;
 	updateTasks: (tasks: TaskItem[]) => void;
 	addNewTask: (previousTaskId?: string) => void;
-	// isChanging: boolean;
-	// setIsChanging: React.Dispatch<React.SetStateAction<boolean>>;
 }
