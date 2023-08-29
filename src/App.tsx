@@ -57,6 +57,14 @@ function App() {
 			<div className={styles.container}>
 				<Tabs />
 
+				{/* <div>
+					<progress
+						className={styles["progress"]}
+						value="30"
+						max="100"
+					></progress>
+				</div> */}
+
 				{!!tasks?.length && (
 					<Tasks
 						tasks={tasks}
@@ -66,7 +74,7 @@ function App() {
 
 				<button
 					className={styles["new-task-button"]}
-					onClick={addNewTask}
+					onClick={() => addNewTask()}
 				>
 					<PlusIcon />
 				</button>

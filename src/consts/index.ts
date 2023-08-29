@@ -6,6 +6,8 @@ export enum Keys {
 	ENTER = "Enter",
 	TAB = "Tab",
 	BACKSPACE = "Backspace",
+	ARROW_UP = "ArrowUp",
+	ARROW_DOWN = "ArrowDown",
 }
 
 export const tabsFromConsts: TabItem[] = [

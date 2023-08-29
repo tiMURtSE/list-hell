@@ -85,6 +85,11 @@ function Task({ task, subarrayIndexes }: Props) {
 				return focusLastItem(taskId, styles.task);
 			}
 		}
+		if (code === Keys.ARROW_UP) {
+		}
+
+		if (code === Keys.ARROW_DOWN) {
+		}
 	};
 
 	const completeTask = (event: MouseEvent) => {
@@ -109,7 +114,7 @@ function Task({ task, subarrayIndexes }: Props) {
 	}, []);
 
 	return (
-		<li>
+		<li className={styles["li"]}>
 			<div
 				id={`my-button-${task.id}`}
 				className={classNames(styles.task, { [styles.striked]: task.isCompleted })}

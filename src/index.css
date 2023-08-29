@@ -35,7 +35,3 @@ button:focus-visible {
 	outline: 2px solid blue;
 	outline-offset: 3px;
 }
-
-li {
-	list-style: none;
-}

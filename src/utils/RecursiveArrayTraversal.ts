@@ -78,7 +78,6 @@ export class RecursiveArrayTraversal {
 		const result = [];
 
 		for (let i = 0; i < tasksCopy.length; i++) {
-			// INFINITE LOOP
 			if (tasksCopy[i].subTasks.length) {
 				if (tasksCopy[i].subTasks.some((task) => task.id === targetTask.id)) {
 					const targetTaskIndex = tasksCopy[i].subTasks.findIndex(
@@ -93,7 +92,7 @@ export class RecursiveArrayTraversal {
 					targetTaskInSubArray.subTasks.push(
 						...tasksCopy[i].subTasks.splice(targetTaskIndex)
 					);
-
+					// targetTask добавляется в родительский список
 					tasksCopy.splice(i + 1, 0, targetTaskInSubArray);
 				} else {
 					tasksCopy[i].subTasks = this.reverseUpdateNesting(
@@ -103,17 +102,6 @@ export class RecursiveArrayTraversal {
 				}
 			}
 
-			result.push(tasksCopy[i]);
-		}
-
-		return result;
-	};
-
-	static reverseUpdateNesting2 = (tasks: TaskItem[], targetTask: TaskItem) => {
-		const tasksCopy = JSON.parse(JSON.stringify(tasks)) as TaskItem[];
-		const result = [];
-
-		for (let i = 0; i < tasksCopy.length; i++) {
 			result.push(tasksCopy[i]);
 		}
 

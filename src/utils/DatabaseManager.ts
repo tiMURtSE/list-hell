@@ -1,5 +1,6 @@
 import { TabItem, TaskItem, TaskList } from "../types";
 import { LocalStorage } from "./LocalStorage";
+import { addTaskAtSameNestingLevel } from "./addTaskAtSameNestingLevel";
 import { createNewTask } from "./createNewTask";
 
 export class DatabaseManager {
@@ -49,6 +50,7 @@ export class DatabaseManager {
 		localStorageData.taskLists = localStorageData.taskLists.map((taskList) => {
 			if (taskList.id === taskListId) {
 				taskList.tasks.push(newTask);
+
 				updatedTasks = taskList.tasks;
 				return taskList;
 			}
