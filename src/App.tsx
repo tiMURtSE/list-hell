@@ -32,9 +32,9 @@ function App() {
 		}
 	};
 
-	const addNewTask = () => {
+	const addNewTask = (previousTaskId?: string) => {
 		if (activeTab) {
-			const updatedTasks = DatabaseManager.addTask(activeTab.taskListId);
+			const updatedTasks = DatabaseManager.addTask(activeTab.taskListId, previousTaskId);
 
 			setTasks(updatedTasks);
 		}

@@ -55,7 +55,7 @@ function Task({ task, subarrayIndexes }: Props) {
 			const textFieldElem = textField.current;
 
 			if (textFieldElem && isCaretAtEnd(textFieldElem)) {
-				return addNewTask();
+				return addNewTask(task.id);
 			}
 
 			return textFieldElem?.blur();

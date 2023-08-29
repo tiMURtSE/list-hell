@@ -42,14 +42,22 @@ export class DatabaseManager {
 		return localStorageData.tabs;
 	}
 
-	static addTask(taskListId: string) {
+	static addTask(taskListId: string, previousTaskId?: string) {
 		const localStorageData = LocalStorage.get();
 		const newTask = createNewTask();
 		let updatedTasks = [] as TaskItem[];
 
 		localStorageData.taskLists = localStorageData.taskLists.map((taskList) => {
 			if (taskList.id === taskListId) {
-				taskList.tasks.push(newTask);
+				if (previousTaskId) {
+					taskList.tasks = addTaskAtSameNestingLevel(
+						taskList.tasks,
+						newTask,
+						previousTaskId
+					);
+				} else {
+					taskList.tasks.push(newTask);
+				}
 
 				updatedTasks = taskList.tasks;
 				return taskList;
