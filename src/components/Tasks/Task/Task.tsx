@@ -62,10 +62,13 @@ function Task({ task, subarrayIndexes }: Props) {
 		}
 
 		if (code === Keys.TAB) {
+			event.preventDefault();
+
 			if (isShiftPressed) {
-				return;
+				const updatedTasks = RecursiveArrayTraversal.reverseUpdateNesting(tasks!, task);
+
+				return updateTasks(updatedTasks);
 			} else {
-				event.preventDefault();
 				const updatedTasks = RecursiveArrayTraversal.updateNesting(tasks!, task);
 
 				return updateTasks(updatedTasks);
