@@ -72,12 +72,14 @@ function App() {
 					/>
 				)}
 
-				<button
-					className={styles["new-task-button"]}
-					onClick={() => addNewTask()}
-				>
-					<PlusIcon />
-				</button>
+				<div className={styles["button-wrapper"]}>
+					<button
+						className={styles["new-task-button"]}
+						onClick={() => addNewTask()}
+					>
+						<PlusIcon />
+					</button>
+				</div>
 			</div>
 		</TabContext.Provider>
 	);
